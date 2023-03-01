@@ -1,7 +1,6 @@
-const championData = () => {
+const championsRequest = () => {
   const baseUrl = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1';
-  const championImg = 'champion-icons/1.png'
-  // replace 1 with png 
+
   const fetchSummary = async () => {
     const response = await fetch(`${baseUrl}/champion-summary.json`);
     const data = await response.json();
@@ -14,14 +13,16 @@ const championData = () => {
       return {
         id: champ.id,
         name: champ.name,
+        img: `${baseUrl}/champion-icons/${champ.id}.png`,
       }
     })
+    const excludeNone = simplified.filter((champ) => champ.id !== -1);
     //const alphabetical = simplified.sort((a,b) => a.name.localeCompare(b.name));
-    return simplified;
+    return excludeNone;
   }
   return {
     processSummary
   }
 }
 
-export default championData();
+export default championsRequest();
