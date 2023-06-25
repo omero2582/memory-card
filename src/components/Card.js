@@ -3,11 +3,11 @@ import React from "react";
 export default function Card ({champion, handleClick}) {
   const {name, id, img} = champion;
   return (
-    <div className="card" onClick={() => handleClick(champion)}>
-      <p>{id}</p>
-      <h2>{name}</h2>
-      <img alt={name} src={img}/>
-    </div>
+    <button className="Card" onClick={() => handleClick(champion)}>
+      {/* <p>{id}</p> */}
+      <h3 className="card-name">{name}</h3>
+      <img className="card-img" alt={name} src={img}/>
+    </button>
   )
 }
 
