@@ -87,7 +87,7 @@ function App() {
   return (
     <div className='container'>
       <main className='game'>
-        <h1>Memory Card Game</h1>
+        <h1 className='main-title'>Memory Card Game</h1>
         <p>Click on every Champion once only, to get to the next level</p>
         <Scoreboard level={level} numChamps={championsThisLevel.length}/>
         <Board champions={championsThisLevel} handleCardClick={handleCardClick}/>

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import './styles/Advanced.css'
 export default function Advanced({logs, championsClicked, textareaRef}) {
 
   useEffect(() => {

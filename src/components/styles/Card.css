@@ -1,0 +1,48 @@
+:root {
+  --card-clicked:lime;
+  --card-background: rgb(250, 235, 215);
+  --card-hover: rgb(0, 255, 255);
+}
+
+.Card {
+  background-color: var(--card-background);
+  border: 3px solid black;
+  display: grid;
+  justify-items: center;
+  padding: 4px 0px 10px;
+}
+
+.Card:hover:not(.clicked){
+  background-color: var(--card-hover);
+}
+
+.Card.clicked {
+  background-color:var(--card-clicked);
+  animation: clickAnimation 0.30s;
+}
+
+@keyframes clickAnimation {
+  0% {
+    background-color: var(--card-background);
+  }
+  25% {
+    background-color: var(--card-clicked);
+  }
+  75% {
+    background-color: var(--card-clicked);
+  }
+  100% {
+    background-color: var(--card-background);
+  }
+}
+
+.card-name {
+  font-size: 22px;
+  padding-bottom: 4px;
+}
+
+.card-img {
+  width: 100%;
+  max-width: 100px;
+  height: auto;
+}

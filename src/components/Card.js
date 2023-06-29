@@ -1,9 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
+import './styles/Card.css'
 
-export default function Card ({champion, handleClick}) {
+export default function Card ({champion, onClick}) {
   const {name, id, img} = champion;
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    setClicked(true);
+    onClick(champion);
+    setTimeout(() => {
+      setClicked(false)
+    }, 250)
+  }
   return (
-    <button className="Card" onClick={() => handleClick(champion)}>
+    <button className={`Card ${clicked ? 'clicked' : '' }`} onClick={handleClick}>
       {/* <p>{id}</p> */}
       <h3 className="card-name">{name}</h3>
       <img className="card-img" alt={name} src={img}/>
