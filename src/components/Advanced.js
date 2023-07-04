@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import './styles/Advanced.css'
-export default function Advanced({logs, championsClicked, textareaRef}) {
+export default function Advanced({logs, cardsClicked, textareaRef}) {
 
   useEffect(() => {
     if(textareaRef.current){
@@ -13,8 +13,8 @@ export default function Advanced({logs, championsClicked, textareaRef}) {
       <h2 className="visually-hidden">Advanced Options:</h2>
       <label htmlFor="logs"><h3>Logs</h3></label>
       <textarea ref={textareaRef} id="logs" className='logs' cols={50} rows={10} value={logs.join('\n')} readOnly />
-      <h3>Champions Selected:</h3>
-      {championsClicked.map(champ => <p key={champ.id}>{champ.name}</p>)}
+      <h3>Cards Selected:</h3>
+      {cardsClicked.map(char => <p key={char.id}>{char.name}</p>)}
     </section>
   )
 }

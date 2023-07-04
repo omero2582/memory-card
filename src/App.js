@@ -1,103 +1,134 @@
 import './App.css';
 import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
-import { useEffect, useState, useRef } from 'react';
-import championsRequest from './championsRequest';
+import Options from './components/Options';
 import Advanced from './components/Advanced';
+import championsRequest from './fetch/league';
+import { useEffect, useState, useRef } from 'react';
+import genshin from './fetch/genshin.js';
+import playingCards from './fetch/playingCards';
+import CardOptions from './components/CardOptions';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 
 function App() {
   const [level, setLevel] = useState(1);
-  const [championsList, setChampionsList] = useState([]);
-  const [championsClicked, setChampionsClicked] = useState([]);
-  const [championsThisLevel, setChampionsThisLevel] = useState([]);
-  // let championsThisLevel = [];
-  // ^^ can be calculated using existing state, but its still better to use a state var instead
-  // because of the useEffects that are convenient to use, when level or chamionsClick changes 
-  const [logs, setLogs] = useState([]);
+  const [cardsList, setCardsList] = useState([]);
+  const [cardsClicked, setCardsClicked] = useState([]);
+  const [cardsThisLevel, setCardsThisLevel] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
+  const [isLoading, setIsLoading] = useState(true);
+  const [cardTheme, setCardTheme] = useState('playingCards');
+  const [showNames, setShowNames] = useState(true);
+  const score = cardsClicked.length;
+  const [bestScore, setBestScore] = useState(0);
 
   const logToTextArea = (message) => {
     setLogs(l => [...l, message]);
   };
 
-  // Inital load of all champions & images
+  // Load cards when cardTheme changes
   useEffect(() => {
-    const fetchData = async () => {
-      const championsData = await championsRequest.processSummary();
-      // const shuffled = [...championsData].sort(() => Math.random() - 0.5);
-      const shuffled = shuffleArr(championsData);
-      setChampionsList(shuffled);
-
-      // Preload all images
-      const images = shuffled.map(champ => {
-        const img = new Image();
-        img.src = champ.img;
-        return img;
-      });
+    const getGameCards = async () => {
+      let cards;
+      switch (cardTheme){
+        case 'genshin':
+          cards = await genshin();
+          break;
+        case 'league':
+          cards = await championsRequest.processSummary();
+          break;
+        case 'playingCards':
+        default:
+          cards = await playingCards();
+          break;
+      }
+      return cards;
     }
-    fetchData();
-  }, []);
+
+    const setupGame = async () => {
+      const characterData = await getGameCards();
+      const shuffled = shuffleArr(characterData);
+      setCardsList(shuffled);
+      setCardsClicked([]);
+      await preloadImages(shuffled.map(c => c.img));
+    }
+    setIsLoading(true);
+    setupGame();
+    setIsLoading(false);
+  }, [cardTheme]);
 
   // every level, choose champs out of the initially shuffled list
   useEffect(() => {
-    const pickChamps = () => {
+    const pickCards = () => {
       // Slice automatically uses array.length when you go over the limit. Dont have to worry about edge cases
       // only have to worry about the score and whether I want the Game to end
-      const numChamps = 2 + 2 * level;
-      const subset = championsList.slice(0, numChamps);
+      const numCards = 2 + 2 * level;
+      const subset = cardsList.slice(0, numCards);
       return subset;
     }
-    setChampionsThisLevel(pickChamps());
-  }, [level, championsList])
+    setCardsThisLevel(pickCards());
+  }, [level, cardsList])
 
   // every level
   useEffect(() => {
     logToTextArea(`Round ${level}`);
   }, [level])
 
-  // anytime championsClicked changes, shuffle the current visible champions
+  // anytime cardsClicked changes, shuffle the current visible cards
   useEffect(() => {
-    setChampionsThisLevel(c => shuffleArr(c));
-  }, [championsClicked])
+    setCardsThisLevel(c => shuffleArr(c));
+    if (score > bestScore){
+      setBestScore(score);
+    }
+  }, [cardsClicked, bestScore, score])
 
-  const handleCardClick = (champion) => {
-    if(championsClicked.some(champ => champ.id === champion.id)) { 
-      logToTextArea(`Game Over, Already Clicked ${champion.name}`);
-      // and reset Game ?
-      // problem is, I would need to reshuffle list... can just reshuffle the state variable tho... simple ?
+  const handleCardClick = (character) => {
+    if(cardsClicked.some(char => char.id === character.id)) { 
+      // Game Over
+      logToTextArea(`Game Over, Already Clicked ${character.name}`);
       setLevel(1);
-      setChampionsClicked([]);
-      setChampionsList(c => shuffleArr(c));
+      setCardsClicked([]);
+      setCardsList(c => shuffleArr(c));
     }else {
-      
-      logToTextArea(`adding ${champion.name}`);
-      if(championsClicked.length + 1 === championsThisLevel.length){
+      // sucessful selection
+      logToTextArea(`${character.name} selected`);
+      if(cardsClicked.length + 1 === cardsThisLevel.length){
         setLevel(l => l + 1);
-        setChampionsClicked([]); 
-        // logToTextArea(`Round ${level+1}`);
+        setBestScore(s => s + 1);
+        setCardsClicked([]); 
       } else {
-        setChampionsClicked(c => [...c, champion]);
+        setCardsClicked(c => [...c, character]);
       }
     }
   };
+
+  const handleCardTheme = (e) => {
+    setCardTheme(e.target.value);
+  }
+
+  const handleShowNames = (e) => {
+    setShowNames(e.target.checked);
+  }
 
   return (
     <div className='container'>
       <main className='game'>
         <h1 className='main-title'>Memory Card Game</h1>
-        <p>Click on every Champion once only, to get to the next level</p>
-        <Scoreboard level={level} numChamps={championsThisLevel.length}/>
-        <Board champions={championsThisLevel} handleCardClick={handleCardClick}/>
-        <section className='options'>
-          <h2 className='visually-hidden'>Options</h2>
-          <button onClick={() => setLevel(l => l + 1)}>Next Level</button>
-          <button onClick={() => setShowAdvanced(s => !s)}>{showAdvanced ? 'Hide' : 'Show'} Advanced</button>
-        </section>
+        <p>Click on every Card once only, to get to the next level</p>
+        <CardOptions cardTheme={cardTheme} handleCardTheme={handleCardTheme} showNames={showNames} handleShowNames={handleShowNames}/>
+        <Scoreboard level={level} numCards={cardsThisLevel.length} score={score} bestScore={bestScore}/>
+        {cardsList.length === 0 ?
+          (
+            isLoading ? <h2>Loading...</h2>
+            :<h2 className='error'>ERROR loading Cards</h2>
+          )
+        :<Board cards={cardsThisLevel} handleCardClick={handleCardClick} className={cardTheme} showNames={showNames}/>}
+        <Options handleLevel={setLevel} handleShowAdvanced={setShowAdvanced} showAdvanced={showAdvanced}/>
         {showAdvanced && 
-        <Advanced logs={logs} championsClicked={championsClicked} textareaRef={textareaRef}/>
+        <Advanced logs={logs} cardsClicked={cardsClicked} textareaRef={textareaRef}/>
         }
       
       </main>
@@ -105,10 +136,28 @@ function App() {
         <p>Sebastian Cevallos</p>
       </footer>
     </div>
-    //{JSON.stringify(championsClicked, null, 2)}
+    //{JSON.stringify(cardsClicked, null, 2)}
   );
 }
-// have to pass championsThisLevel.length instead of 2 + 2 * level, 
-// otherwise, after I hit the max number of champs, numChamps would keep increasing
 
 export default App;
+
+function preloadImages(imageUrls) {
+  return Promise.all(
+    imageUrls.map(url => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = url;
+      });
+    })
+  );
+  }
+  // old mapping solution instead of promises. would need to adjust code to fit this fn
+  // const images = shuffled.map(char => {
+  //   const img = new Image();
+  //   img.src = char.img;
+  //   return img;
+  // });
+  /* */

@@ -36,13 +36,23 @@
   }
 }
 
-.card-name {
+.Card .card-name {
   font-size: 22px;
-  padding-bottom: 4px;
+  /* padding: 0px 5px; */
+  /* justify-self: stretch; */
+  /* TODO TODO, have to think about whether I want this line above. It makes some titles look not crammed,
+  but maybe it is better to increase the card size a bit ?*/ 
+  /* padding-bottom: 4px; */
 }
 
-.card-img {
+.Card .card-img {
   width: 100%;
-  max-width: 100px;
+  max-width: 90px;
   height: auto;
+  /**/
+  margin-top: 6px;
+}
+
+.Card .playingCards {
+  background-color: white;
 }
