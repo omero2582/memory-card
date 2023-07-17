@@ -1,0 +1,11 @@
+.Scoreboard {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.Scoreboard div{
+  gap: 30px;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+}

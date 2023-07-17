@@ -10,7 +10,7 @@ import playingCards from './fetch/playingCards';
 import CardOptions from './components/CardOptions';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
-
+// TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
   const [level, setLevel] = useState(1);
   const [cardsList, setCardsList] = useState([]);
@@ -21,7 +21,7 @@ function App() {
   const textareaRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [cardTheme, setCardTheme] = useState('playingCards');
-  const [showNames, setShowNames] = useState(true);
+  const [showNames, setShowNames] = useState(false);
   const score = cardsClicked.length;
   const [bestScore, setBestScore] = useState(0);
 
@@ -116,8 +116,10 @@ function App() {
   return (
     <div className='container'>
       <main className='game'>
-        <h1 className='main-title'>Memory Card Game</h1>
-        <p>Click on every Card once only, to get to the next level</p>
+        <header>
+         <h1 className='main-title'>Memory Card Game</h1>
+          <p>Click on every Card once only, to get to the next level</p>
+        </header>
         <CardOptions cardTheme={cardTheme} handleCardTheme={handleCardTheme} showNames={showNames} handleShowNames={handleShowNames}/>
         <Scoreboard level={level} numCards={cardsThisLevel.length} score={score} bestScore={bestScore}/>
         {cardsList.length === 0 ?

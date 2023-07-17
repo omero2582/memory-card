@@ -5,7 +5,7 @@
 
 h2, .h2 {
   font-size: 25px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 button:hover {
@@ -38,52 +38,9 @@ button:hover {
   padding: 20px 0px;
 }
 
-.CardOptions{
-  justify-self: flex-start;
-  margin-top: 10px;
-  display: grid;
-  grid-auto-flow: column;
-  gap: 20px;
+.game header {
+  /* margin: 5px 0px 20px; */
 }
-
-.CardOptions > section {
-  display: grid;
-  grid-auto-flow: column;
-}
-
-.CardOptions section.show-names{
-  gap: 5px;
-}
-
-.CardOptions label {
-  font-size: 1.32rem;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.CardOptions select {
-  font-size: 1.1rem;
-}
-
-.CardOptions #show-names{
-  width: 20px;
-  height: 20px;
-  margin-top: 5px;
-  align-self: center;
-}
-
-.Scoreboard {
-  display: grid;
-  grid-auto-flow: column;
-}
-
-.Scoreboard div{
-  gap: 30px;
-  display: grid;
-  grid-auto-flow: column;
-  justify-content: start;
-}
-
 
 .Board {
   display: grid;
@@ -91,19 +48,6 @@ button:hover {
   /* background-color: black;
   gap: 3px;
   padding: 3px; */
-}
-
-.options {
-  margin-top: 10px;
-  display: grid;
-  grid-auto-flow: column;
-  justify-content: center;
-  gap: 10px;
-}
-
-.options button {
-  font-size: 1.2rem;
-  padding: 5px;
 }
 
 .Footer {
@@ -120,8 +64,3 @@ button:hover {
   flex-direction: column;
   gap: 10px;
 }
-
-.Footer p {
-  margin: 0px;
-}
-

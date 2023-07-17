@@ -1,4 +1,5 @@
 // import './styles/CardTheme.css'
+import './styles/CardOptions.css'
 
 export default function CardOptions ({cardTheme, handleCardTheme, showNames, handleShowNames}) {
   return(

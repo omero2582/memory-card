@@ -1,3 +1,4 @@
+// https://github.com/hayeah/playing-cards-assets
 // import image from '../../public/Genshin/Icons'
 // https://stackoverflow.com/questions/42118296/dynamically-import-images-from-a-directory-using-webpack
 

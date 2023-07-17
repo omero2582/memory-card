@@ -1,7 +1,7 @@
 .Advanced{
   margin-top: 8px;
 }
-.logs {
+.Advanced .logs {
   resize: none;
   font-family: inherit;
   font-size: 1rem;
