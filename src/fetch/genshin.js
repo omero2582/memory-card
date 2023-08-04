@@ -21,9 +21,9 @@ export default function genshin() {
   const name = nameWithSpaces.replace(/ Icon/g, '');
 
     const character = {
-      img: path,
-      name,
       id: i,
+      name,
+      img: path,
     }
     return character;
   })

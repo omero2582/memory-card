@@ -9,7 +9,7 @@
   border: 3px solid black;
   display: grid;
   justify-items: center;
-  padding: 4px 0px 10px;
+  padding: 6px 0px 10px;
 }
 
 .Card:hover:not(.clicked){
@@ -36,8 +36,13 @@
   }
 }
 
+.Card.showClickedCheat {
+  background-color:salmon;
+}
+
 .Card .card-name {
-  font-size: 22px;
+  font-size: 20px;
+  align-self: center;
   /* padding: 0px 5px; */
   /* justify-self: stretch; */
   /* TODO TODO, have to think about whether I want this line above. It makes some titles look not crammed,

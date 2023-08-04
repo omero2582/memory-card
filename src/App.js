@@ -21,6 +21,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showCardsClicked, setShowCardsClicked] = useState(false);
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
   
@@ -62,31 +63,29 @@ function App() {
     setupGame();
     setIsLoading(false);
   }, [cardTheme]);
+  
+  // Effects
+  // every level
+  useEffect(() => {
+    logToTextArea(`Round ${level}`);
+  }, [level])
 
-  // TODO BELOW: think I have to change these 3 useEffects below. Remove cardsThisLevel as a state var, and change it
-  // into a regular variable that uses useMemo()
-  // every level, choose champs out of the initially shuffled list
+  // everytime level or cardsList changes, set cardsThisLevel
   useEffect(() => {
     const pickCards = () => {
-      // Slice automatically uses array.length when you go over the limit. Dont have to worry about edge cases
-      // only have to worry about the score and whether I want the Game to end
+      // Slice automatically uses array.length when you go over the limit
       const numCards = 2 + 2 * level;
       const subset = cardsList.slice(0, numCards);
       return subset;
     }
     setCardsThisLevel(pickCards());
   }, [level, cardsList])
-
-  // every level
-  useEffect(() => {
-    logToTextArea(`Round ${level}`);
-  }, [level])
-
+  
   // anytime cardsClicked changes, shuffle the current visible cards
   useEffect(() => {
     setCardsThisLevel(c => shuffleArr(c));
   }, [cardsClicked])
-  /// TODO ABOVE
+
 
   const handleCardClick = (character) => {
     if(cardsClicked.some(char => char.id === character.id)) { 
@@ -119,6 +118,15 @@ function App() {
     setShowNames(e.target.checked);
   }
 
+  const handleShowAdvanced = () => {
+    setShowAdvanced(s => !s);
+    setShowCardsClicked(s => !s);
+  }
+
+  const handleNextLevel = () => {
+    setLevel(l => l + 1)
+  }
+
   return (
     <div className='container'>
       <main className='game'>
@@ -126,15 +134,36 @@ function App() {
          <h1 className='main-title'>Memory Card Game</h1>
           <p>Click on every Card once only, to get to the next level</p>
         </header>
-        <CardOptions cardTheme={cardTheme} handleCardTheme={handleCardTheme} showNames={showNames} handleShowNames={handleShowNames}/>
-        <Scoreboard level={level} numCards={cardsThisLevel.length} score={score} bestScore={bestScore}/>
+        <CardOptions
+          cardTheme={cardTheme}
+          handleCardTheme={handleCardTheme}
+          showNames={showNames}
+          handleShowNames={handleShowNames}
+        />
+        <Scoreboard
+          level={level}
+          numCards={cardsThisLevel.length}
+          score={score}
+          bestScore={bestScore}
+        />
         {cardsList.length === 0 ?
           (
             isLoading ? <h2>Loading...</h2>
             :<h2 className='error'>ERROR loading Cards</h2>
           )
-        :<Board cards={cardsThisLevel} handleCardClick={handleCardClick} className={cardTheme} showNames={showNames}/>}
-        <GameOptions handleLevel={setLevel} handleShowAdvanced={setShowAdvanced} showAdvanced={showAdvanced}/>
+        :<Board
+          cards={cardsThisLevel}
+          cardsClicked={cardsClicked}
+          handleCardClick={handleCardClick}
+          cardTheme={cardTheme}
+          showNames={showNames}
+          showCardsClicked={showCardsClicked}
+          />}
+        <GameOptions
+          handleNextLevel={handleNextLevel}
+          handleShowAdvanced={handleShowAdvanced}
+          showAdvanced={showAdvanced}
+        />
         {showAdvanced && 
         <Advanced logs={logs} cardsClicked={cardsClicked} textareaRef={textareaRef}/>
         }
