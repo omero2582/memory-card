@@ -6,8 +6,10 @@ export default function CardOptions ({cardTheme, handleCardTheme, showNames, han
     <section className='CardOptions'>
       <section className="game-theme">
         <label htmlFor="game-theme" className="game-theme-title">Card Theme:</label>
-        <select id="game-theme" value={cardTheme || 'league'}  // sets price-asc as default, without changing the url
-        onChange={handleCardTheme}>
+        <select 
+          id="game-theme" 
+          value={cardTheme || 'league'}  // sets league as default, without changing the url
+          onChange={handleCardTheme}>
           <option value='playingCards'>Playing Cards</option>
           <option value='league'>League of Legends</option>
           <option value='genshin'>Genshin Impact</option>

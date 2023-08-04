@@ -5,6 +5,7 @@ export default function Card ({character, onClick, className, showNames}) {
   const {name, id, img} = character;
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
+    // css click class effect
     setClicked(true);
     onClick(character);
     setTimeout(() => {
@@ -13,7 +14,6 @@ export default function Card ({character, onClick, className, showNames}) {
   }
   return (
     <button className={`Card ${clicked ? 'clicked' : '' }`} onClick={handleClick}>
-      {/* <p>{id}</p> */}
       {showNames && <h3 className="card-name">{name}</h3>}
       <img className={`card-img ${className}`} alt={name} src={img}/>
     </button>

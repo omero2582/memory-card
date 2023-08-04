@@ -1,4 +1,4 @@
-.Options {
+.GameOptions {
   margin-top: 10px;
   display: grid;
   grid-auto-flow: column;
@@ -6,11 +6,15 @@
   gap: 10px;
 }
 
-.Options button {
+.GameOptions button {
   font-size: 1.2rem;
   padding: 6px;
   /**/
   border-radius: 5px;
   border: 1px solid black;
   background-color:rgb(200, 234, 255);
+}
+
+.GameOptions button:hover {
+  background-color:hsl(203, 100%, 84%);
 }

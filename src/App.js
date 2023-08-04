@@ -1,7 +1,7 @@
 import './App.css';
 import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
-import Options from './components/Options';
+import GameOptions from './components/GameOptions';
 import Advanced from './components/Advanced';
 import championsRequest from './fetch/league';
 import { useEffect, useState, useRef } from 'react';
@@ -16,15 +16,17 @@ function App() {
   const [cardsList, setCardsList] = useState([]);
   const [cardsClicked, setCardsClicked] = useState([]);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
+  const [cardTheme, setCardTheme] = useState('playingCards');
+  const [showNames, setShowNames] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
-  const [isLoading, setIsLoading] = useState(true);
-  const [cardTheme, setCardTheme] = useState('playingCards');
-  const [showNames, setShowNames] = useState(false);
+  
   const score = cardsClicked.length;
   const [bestScore, setBestScore] = useState(0);
-
+  
   const logToTextArea = (message) => {
     setLogs(l => [...l, message]);
   };
@@ -55,11 +57,14 @@ function App() {
       setCardsClicked([]);
       await preloadImages(shuffled.map(c => c.img));
     }
+
     setIsLoading(true);
     setupGame();
     setIsLoading(false);
   }, [cardTheme]);
 
+  // TODO BELOW: think I have to change these 3 useEffects below. Remove cardsThisLevel as a state var, and change it
+  // into a regular variable that uses useMemo()
   // every level, choose champs out of the initially shuffled list
   useEffect(() => {
     const pickCards = () => {
@@ -80,10 +85,8 @@ function App() {
   // anytime cardsClicked changes, shuffle the current visible cards
   useEffect(() => {
     setCardsThisLevel(c => shuffleArr(c));
-    if (score > bestScore){
-      setBestScore(score);
-    }
-  }, [cardsClicked, bestScore, score])
+  }, [cardsClicked])
+  /// TODO ABOVE
 
   const handleCardClick = (character) => {
     if(cardsClicked.some(char => char.id === character.id)) { 
@@ -95,9 +98,12 @@ function App() {
     }else {
       // sucessful selection
       logToTextArea(`${character.name} selected`);
+      if (score + 1 > bestScore){
+        setBestScore(score + 1);
+      }
+
       if(cardsClicked.length + 1 === cardsThisLevel.length){
         setLevel(l => l + 1);
-        setBestScore(s => s + 1);
         setCardsClicked([]); 
       } else {
         setCardsClicked(c => [...c, character]);
@@ -128,7 +134,7 @@ function App() {
             :<h2 className='error'>ERROR loading Cards</h2>
           )
         :<Board cards={cardsThisLevel} handleCardClick={handleCardClick} className={cardTheme} showNames={showNames}/>}
-        <Options handleLevel={setLevel} handleShowAdvanced={setShowAdvanced} showAdvanced={showAdvanced}/>
+        <GameOptions handleLevel={setLevel} handleShowAdvanced={setShowAdvanced} showAdvanced={showAdvanced}/>
         {showAdvanced && 
         <Advanced logs={logs} cardsClicked={cardsClicked} textareaRef={textareaRef}/>
         }
