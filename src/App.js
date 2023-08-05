@@ -12,25 +12,33 @@ import CardOptions from './components/CardOptions';
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
+  
   const [cardsList, setCardsList] = useState([]);
-  const [cardsClicked, setCardsClicked] = useState([]);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
   const [cardTheme, setCardTheme] = useState('playingCards');
-  const [showNames, setShowNames] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   
+  const [showNames, setShowNames] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showCardsClicked, setShowCardsClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
   
-  const score = cardsClicked.length;
-  const [bestScore, setBestScore] = useState(0);
   
   const logToTextArea = (message) => {
     setLogs(l => [...l, message]);
   };
+
+  const resetCardsClicked = () => {
+    setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
+  }
+
+  const shuffleCardsThisLevel = () => {
+    setCardsThisLevel(c => shuffleArr(c));
+  }
 
   // Load cards when cardTheme changes
   useEffect(() => {
@@ -52,16 +60,19 @@ function App() {
     }
 
     const setupGame = async () => {
+      setIsLoading(true);
+      logToTextArea(`Card theme set: ${cardTheme}`);
       const characterData = await getGameCards();
+      // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
       const shuffled = shuffleArr(characterData);
       setCardsList(shuffled);
-      setCardsClicked([]);
+      setScore(0);
       await preloadImages(shuffled.map(c => c.img));
+      setIsLoading(false);
     }
 
-    setIsLoading(true);
     setupGame();
-    setIsLoading(false);
+    
   }, [cardTheme]);
   
   // Effects
@@ -80,34 +91,44 @@ function App() {
     }
     setCardsThisLevel(pickCards());
   }, [level, cardsList])
-  
-  // anytime cardsClicked changes, shuffle the current visible cards
-  useEffect(() => {
-    setCardsThisLevel(c => shuffleArr(c));
-  }, [cardsClicked])
 
 
+  // Handlers
   const handleCardClick = (character) => {
-    if(cardsClicked.some(char => char.id === character.id)) { 
+    if(character.isClicked) { 
       // Game Over
       logToTextArea(`Game Over, Already Clicked ${character.name}`);
+      resetCardsClicked();
+      setScore(0);
       setLevel(1);
-      setCardsClicked([]);
       setCardsList(c => shuffleArr(c));
     }else {
       // sucessful selection
       logToTextArea(`${character.name} selected`);
+      setScore(s => s + 1);
       if (score + 1 > bestScore){
         setBestScore(score + 1);
       }
 
-      if(cardsClicked.length + 1 === cardsThisLevel.length){
+      if(score + 1 === cardsThisLevel.length){
+        // next level
+        resetCardsClicked();
         setLevel(l => l + 1);
-        setCardsClicked([]); 
+        setScore(0);
       } else {
-        setCardsClicked(c => [...c, character]);
+        // continue on same level
+        setCardsThisLevel(cards => cards.map(c => {
+          if(c.id === character.id){
+            return ({...character, isClicked: true})
+          }else {
+            return c;
+          }
+        }))
       }
     }
+
+    // Always suffle after every click
+    shuffleCardsThisLevel();
   };
 
   const handleCardTheme = (e) => {
@@ -153,7 +174,6 @@ function App() {
           )
         :<Board
           cards={cardsThisLevel}
-          cardsClicked={cardsClicked}
           handleCardClick={handleCardClick}
           cardTheme={cardTheme}
           showNames={showNames}
@@ -165,7 +185,7 @@ function App() {
           showAdvanced={showAdvanced}
         />
         {showAdvanced && 
-        <Advanced logs={logs} cardsClicked={cardsClicked} textareaRef={textareaRef}/>
+        <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
         }
       
       </main>

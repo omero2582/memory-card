@@ -24,6 +24,7 @@ export default function genshin() {
       id: i,
       name,
       img: path,
+      isClicked: false,
     }
     return character;
   })

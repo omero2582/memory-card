@@ -28,6 +28,7 @@ export default function playingCards() {
       id: i,
       name,
       img: path,
+      isClicked: false,
     }
     return character;
   })

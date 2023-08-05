@@ -16,7 +16,7 @@
   background-color: var(--card-hover);
 }
 
-.Card.clicked {
+.Card.click-animate {
   background-color:var(--card-clicked);
   animation: clickAnimation 0.30s;
 }

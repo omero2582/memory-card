@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./Card";
 
-export default function Board ({cards, cardsClicked, showCardsClicked, handleCardClick, cardTheme, showNames}) {
+export default function Board ({cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
   return (
     <section className="Board">
       <h2 className="visually-hidden">Gameboard</h2>
@@ -12,7 +12,7 @@ export default function Board ({cards, cardsClicked, showCardsClicked, handleCar
           onClick={handleCardClick}
           cardTheme={cardTheme}
           showNames={showNames}
-          showClickedCheat={showCardsClicked && cardsClicked.some(c => character.id === c.id)}
+          showClickedCheat={showCardsClicked && character.isClicked}
         />)}
     </section>
   )

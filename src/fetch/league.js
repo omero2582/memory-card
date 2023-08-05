@@ -14,6 +14,7 @@ const championsRequest = () => {
         id: champ.id,
         name: champ.name,
         img: `${baseUrl}/champion-icons/${champ.id}.png`,
+        isClicked: false,
       }
     })
     const excludeNone = simplified.filter((champ) => champ.id !== -1);
