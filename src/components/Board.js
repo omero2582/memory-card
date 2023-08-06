@@ -1,7 +1,11 @@
 import React from "react";
 import Card from "./Card";
 
-export default function Board ({cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
+export default function Board ({error, isLoading, cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
+  
+  if (error) return <h2 className='error'>ERROR loading Cards</h2>
+  if (isLoading) return <h2>Loading...</h2>
+
   return (
     <section className="Board">
       <h2 className="visually-hidden">Gameboard</h2>

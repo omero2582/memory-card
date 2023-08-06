@@ -3,6 +3,9 @@ const championsRequest = () => {
 
   const fetchSummary = async () => {
     const response = await fetch(`${baseUrl}/champion-summary.json`);
+    if (response.status >= 400) {
+      throw new Error("server error");
+    }
     const data = await response.json();
     return data;
   }

@@ -23,7 +23,9 @@ function App() {
   const [showNames, setShowNames] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showCardsClicked, setShowCardsClicked] = useState(false);
+  
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
   
@@ -61,6 +63,7 @@ function App() {
 
     const setupGame = async () => {
       setIsLoading(true);
+      setError(null);
       logToTextArea(`Card theme set: ${cardTheme}`);
       const characterData = await getGameCards();
       // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
@@ -71,7 +74,8 @@ function App() {
       setIsLoading(false);
     }
 
-    setupGame();
+    setupGame()
+      .catch((error) => setError(error));
     
   }, [cardTheme]);
   
@@ -167,18 +171,15 @@ function App() {
           score={score}
           bestScore={bestScore}
         />
-        {cardsList.length === 0 ?
-          (
-            isLoading ? <h2>Loading...</h2>
-            :<h2 className='error'>ERROR loading Cards</h2>
-          )
-        :<Board
+        <Board
+          error={error}
+          isLoading={isLoading}
           cards={cardsThisLevel}
           handleCardClick={handleCardClick}
           cardTheme={cardTheme}
           showNames={showNames}
           showCardsClicked={showCardsClicked}
-          />}
+          />
         <GameOptions
           handleNextLevel={handleNextLevel}
           handleShowAdvanced={handleShowAdvanced}
