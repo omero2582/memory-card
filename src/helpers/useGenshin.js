@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import GenshinChars from '../fetch/cachedGenshin.json';
+import GenshinChars from '../useCards/fetch/cachedGenshin.json';
 
 // TODO TODO... cant run this from the frontend bc cors errors... have to either stup backend or proxy
 // or just download data or GG

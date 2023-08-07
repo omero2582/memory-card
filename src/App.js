@@ -3,11 +3,9 @@ import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
 import GameOptions from './components/GameOptions';
 import Advanced from './components/Advanced';
-import championsRequest from './fetch/league';
 import { useEffect, useState, useRef } from 'react';
-import genshin from './fetch/genshin.js';
-import playingCards from './fetch/playingCards';
 import CardOptions from './components/CardOptions';
+import useCards from './useCards/useCards';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
@@ -16,23 +14,21 @@ function App() {
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
   
-  const [cardsList, setCardsList] = useState([]);
+  // const [cardsList, setCardsList] = useState([]);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
   const [cardTheme, setCardTheme] = useState('playingCards');
   
   const [showNames, setShowNames] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showCardsClicked, setShowCardsClicked] = useState(false);
-  
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
   
   
   const logToTextArea = (message) => {
     setLogs(l => [...l, message]);
-  };
+  }
 
   const resetCardsClicked = () => {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
@@ -43,43 +39,15 @@ function App() {
   }
 
   // Load cards when cardTheme changes
-  useEffect(() => {
-    const getGameCards = async () => {
-      let cards;
-      switch (cardTheme){
-        case 'genshin':
-          cards = await genshin();
-          break;
-        case 'league':
-          cards = await championsRequest.processSummary();
-          break;
-        case 'playingCards':
-        default:
-          cards = await playingCards();
-          break;
-      }
-      return cards;
-    }
+  const {cardsList, setCardsList, isLoading, error } = useCards(cardTheme);
 
-    const setupGame = async () => {
-      setIsLoading(true);
-      setError(null);
-      logToTextArea(`Card theme set: ${cardTheme}`);
-      const characterData = await getGameCards();
-      // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
-      const shuffled = shuffleArr(characterData);
-      setCardsList(shuffled);
-      setScore(0);
-      await preloadImages(shuffled.map(c => c.img));
-      setIsLoading(false);
-    }
-
-    setupGame()
-      .catch((error) => setError(error));
-    
-  }, [cardTheme]);
-  
   // Effects
+  // card theme change
+  useEffect(() => {
+    logToTextArea(`Card theme set: ${cardTheme}`);
+    setScore(0);
+  },[cardTheme]);
+  
   // every level
   useEffect(() => {
     logToTextArea(`Round ${level}`);
@@ -149,7 +117,8 @@ function App() {
   }
 
   const handleNextLevel = () => {
-    setLevel(l => l + 1)
+    setLevel(l => l + 1);
+    setScore(0);
   }
 
   return (
