@@ -20,6 +20,11 @@ button:hover {
   min-height: 100vh;
 }
 
+.container.dark{
+  background-color: #15202B;
+  color:#F7F9F9;
+}
+
 .game {
   justify-self: center;
   display: grid;

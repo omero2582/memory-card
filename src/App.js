@@ -3,13 +3,18 @@ import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
 import GameOptions from './components/GameOptions';
 import Advanced from './components/Advanced';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, createContext } from 'react';
 import CardOptions from './components/CardOptions';
 import useCards from './useCards/useCards';
 
+export const ThemeContext = createContext({
+  theme: 'light',
+  toggleTheme: () => {},
+});
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
+  const [theme, setTheme] = useState('light');
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -63,6 +68,10 @@ function App() {
     }
     setCardsThisLevel(pickCards());
   }, [level, cardsList])
+
+  useEffect(() => {
+    logToTextArea(`Color theme set to: ${theme}`);
+  }, [theme])
 
 
   // Handlers
@@ -121,48 +130,54 @@ function App() {
     setScore(0);
   }
 
+  const toggleTheme = () => {
+    setTheme(t => (t === 'light') ? 'dark' : 'light')
+  }
+
   return (
-    <div className='container'>
-      <main className='game'>
-        <header>
-         <h1 className='main-title'>Memory Card Game</h1>
-          <p>Click on every Card once only, to get to the next level</p>
-        </header>
-        <CardOptions
-          cardTheme={cardTheme}
-          handleCardTheme={handleCardTheme}
-          showNames={showNames}
-          handleShowNames={handleShowNames}
-        />
-        <Scoreboard
-          level={level}
-          numCards={cardsThisLevel.length}
-          score={score}
-          bestScore={bestScore}
-        />
-        <Board
-          error={error}
-          isLoading={isLoading}
-          cards={cardsThisLevel}
-          handleCardClick={handleCardClick}
-          cardTheme={cardTheme}
-          showNames={showNames}
-          showCardsClicked={showCardsClicked}
+    <ThemeContext.Provider value={{theme, toggleTheme}}>
+      <div className={`container ${theme}`}>
+        <main className='game'>
+          <header>
+          <h1 className='main-title'>Memory Card Game</h1>
+            <p>Click on every Card once only, to get to the next level</p>
+          </header>
+          <CardOptions
+            cardTheme={cardTheme}
+            handleCardTheme={handleCardTheme}
+            showNames={showNames}
+            handleShowNames={handleShowNames}
           />
-        <GameOptions
-          handleNextLevel={handleNextLevel}
-          handleShowAdvanced={handleShowAdvanced}
-          showAdvanced={showAdvanced}
-        />
-        {showAdvanced && 
-        <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
-        }
-      
-      </main>
-      <footer className='Footer'>
-        <p>Sebastian Cevallos</p>
-      </footer>
-    </div>
+          <Scoreboard
+            level={level}
+            numCards={cardsThisLevel.length}
+            score={score}
+            bestScore={bestScore}
+          />
+          <Board
+            error={error}
+            isLoading={isLoading}
+            cards={cardsThisLevel}
+            handleCardClick={handleCardClick}
+            cardTheme={cardTheme}
+            showNames={showNames}
+            showCardsClicked={showCardsClicked}
+            />
+          <GameOptions
+            handleNextLevel={handleNextLevel}
+            handleShowAdvanced={handleShowAdvanced}
+            showAdvanced={showAdvanced}
+          />
+          {showAdvanced && 
+          <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
+          }
+        
+        </main>
+        <footer className='Footer'>
+          <p>Sebastian Cevallos</p>
+        </footer>
+      </div>
+    </ThemeContext.Provider>
     //{JSON.stringify(cardsClicked, null, 2)}
   );
 }

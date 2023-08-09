@@ -1,7 +1,11 @@
 // import './styles/CardTheme.css'
+import { useContext } from 'react';
 import './styles/CardOptions.css'
+import Switch from "react-switch";
+import { ThemeContext } from '../App';
 
 export default function CardOptions ({cardTheme, handleCardTheme, showNames, handleShowNames}) {
+  const {theme, toggleTheme} = useContext(ThemeContext);
   return(
     <section className='CardOptions'>
       <section className="game-theme">
@@ -18,6 +22,10 @@ export default function CardOptions ({cardTheme, handleCardTheme, showNames, han
       <section className="show-names">
         <input id="show-names" type="checkbox" checked={showNames} onChange={handleShowNames}></input>
         <label htmlFor="show-names">Show Names</label>
+      </section>
+      <section>
+        <label htmlFor='toggle-theme'>Dark Theme</label>
+        <Switch id='toggle-theme' onChange={toggleTheme} checked={(theme === 'dark')} />
       </section>
     </section>
   )
