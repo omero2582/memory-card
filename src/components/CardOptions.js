@@ -2,7 +2,7 @@
 import { useContext } from 'react';
 import './styles/CardOptions.css'
 import Switch from "react-switch";
-import { ThemeContext } from '../App';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function CardOptions ({cardTheme, handleCardTheme, showNames, handleShowNames}) {
   const {theme, toggleTheme} = useContext(ThemeContext);
@@ -25,7 +25,17 @@ export default function CardOptions ({cardTheme, handleCardTheme, showNames, han
       </section>
       <section>
         <label htmlFor='toggle-theme'>Dark Theme</label>
-        <Switch id='toggle-theme' onChange={toggleTheme} checked={(theme === 'dark')} />
+        <Switch
+          id='toggle-theme'
+          onChange={toggleTheme}
+          checked={(theme === 'dark')}
+          uncheckedIcon={false}
+          offColor='#F7F9F9'
+          offHandleColor='#000'
+          className='toggle-theme'
+          height={20}
+          width={46}
+        />
       </section>
     </section>
   )

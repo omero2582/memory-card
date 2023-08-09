@@ -15,6 +15,7 @@
 .CardOptions > section {
   display: grid;
   grid-auto-flow: column;
+  align-items: center;
 }
 
 .CardOptions section.show-names{

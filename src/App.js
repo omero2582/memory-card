@@ -3,18 +3,15 @@ import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
 import GameOptions from './components/GameOptions';
 import Advanced from './components/Advanced';
-import { useEffect, useState, useRef, createContext } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import CardOptions from './components/CardOptions';
 import useCards from './useCards/useCards';
+import { ThemeContext } from './context/ThemeContext';
 
-export const ThemeContext = createContext({
-  theme: 'light',
-  toggleTheme: () => {},
-});
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -69,7 +66,9 @@ function App() {
     setCardsThisLevel(pickCards());
   }, [level, cardsList])
 
+  //sync theme change to local storage & text Logs
   useEffect(() => {
+    localStorage.setItem('theme', theme)
     logToTextArea(`Color theme set to: ${theme}`);
   }, [theme])
 
@@ -173,7 +172,7 @@ function App() {
           }
         
         </main>
-        <footer className='Footer'>
+        <footer className={`Footer ${theme}`}>
           <p>Sebastian Cevallos</p>
         </footer>
       </div>
