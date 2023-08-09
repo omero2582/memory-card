@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/memory-card/static/css/main.89e84a3e.css",
-    "main.js": "/memory-card/static/js/main.1532a8fb.js",
+    "main.css": "/memory-card/static/css/main.20945e1c.css",
+    "main.js": "/memory-card/static/js/main.d4d9d784.js",
     "static/media/king_of_hearts.png": "/memory-card/static/media/king_of_hearts.675074aa3aa1f24a51c6.png",
     "static/media/king_of_diamonds.png": "/memory-card/static/media/king_of_diamonds.6fe8c35703396c58f084.png",
     "static/media/queen_of_clubs.png": "/memory-card/static/media/queen_of_clubs.271b1eb95152acbd4aab.png",
@@ -125,11 +125,11 @@
     "static/media/2_of_clubs.png": "/memory-card/static/media/2_of_clubs.9cab14d526ace831b9f0.png",
     "static/media/2_of_spades.png": "/memory-card/static/media/2_of_spades.9436c10d350d441f42a7.png",
     "index.html": "/memory-card/index.html",
-    "main.89e84a3e.css.map": "/memory-card/static/css/main.89e84a3e.css.map",
-    "main.1532a8fb.js.map": "/memory-card/static/js/main.1532a8fb.js.map"
+    "main.20945e1c.css.map": "/memory-card/static/css/main.20945e1c.css.map",
+    "main.d4d9d784.js.map": "/memory-card/static/js/main.d4d9d784.js.map"
   },
   "entrypoints": [
-    "static/css/main.89e84a3e.css",
-    "static/js/main.1532a8fb.js"
+    "static/css/main.20945e1c.css",
+    "static/js/main.d4d9d784.js"
   ]
 }
