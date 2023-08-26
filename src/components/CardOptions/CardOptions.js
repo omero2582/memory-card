@@ -1,8 +1,8 @@
 // import './styles/CardTheme.css'
 import { useContext } from 'react';
-import './styles/CardOptions.css'
+import './CardOptions.css'
 import Switch from "react-switch";
-import { ThemeContext } from '../context/ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
 
 export default function CardOptions ({cardTheme, handleCardTheme, showNames, handleShowNames}) {
   const {theme, toggleTheme} = useContext(ThemeContext);

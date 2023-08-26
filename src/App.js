@@ -1,10 +1,10 @@
 import './App.css';
-import Scoreboard from './components/Scoreboard';
-import Board from './components/Board';
-import GameOptions from './components/GameOptions';
-import Advanced from './components/Advanced';
+import Scoreboard from './components/Scoreboard/Scoreboard';
+import Board from './components/Board/Board';
+import GameOptions from './components/GameOptions/GameOptions';
+import Advanced from './components/Advanced/Advanced';
 import { useEffect, useState, useRef } from 'react';
-import CardOptions from './components/CardOptions';
+import CardOptions from './components/CardOptions/CardOptions';
 import useCards from './useCards/useCards';
 import { ThemeContext } from './context/ThemeContext';
 

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import './styles/Card.css'
+import './Card.css'
 
 export default function Card ({character, onClick, cardTheme, showNames, showClickedCheat}) {
   const {name, id, img} = character;

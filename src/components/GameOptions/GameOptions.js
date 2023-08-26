@@ -1,4 +1,4 @@
-import './styles/GameOptions.css'
+import './GameOptions.css'
 
 export default function GameOptions ({ handleNextLevel, handleShowAdvanced, showAdvanced}) {
   return (

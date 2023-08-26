@@ -1,5 +1,5 @@
 import React from "react";
-import './styles/Scoreboard.css'
+import './Scoreboard.css'
 
 export default function Scoreboard ({level, numCards, score, bestScore}) {
   return (

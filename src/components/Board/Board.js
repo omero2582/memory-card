@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "./Card";
+import Card from "../Card/Card";
 
 export default function Board ({error, isLoading, cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
   
