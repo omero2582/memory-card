@@ -7,11 +7,12 @@ import { useEffect, useState, useRef } from 'react';
 import CardOptions from './components/CardOptions/CardOptions';
 import useCards from './useCards/useCards';
 import { ThemeContext } from './context/ThemeContext';
+import { flushSync } from 'react-dom';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -26,6 +27,8 @@ function App() {
 
   const [logs, setLogs] = useState([]);
   const textareaRef = useRef();
+
+  const [isFlipped, setIsFlipped] = useState(false);
   
   
   const logToTextArea = (message) => {
@@ -36,8 +39,16 @@ function App() {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
   }
 
-  const shuffleCardsThisLevel = () => {
-    setCardsThisLevel(c => shuffleArr(c));
+  const shuffleCardsThisLevel = async (newCards) => {
+    // ORIGINAL setCardsThisLevel(c => shuffleArr(c));
+
+    setIsFlipped(true);
+    if (cardsThisLevel.length !== 0){
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    }
+    setCardsThisLevel(c => shuffleArr(newCards || c));
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setIsFlipped(false);
   }
 
   // Load cards when cardTheme changes
@@ -63,7 +74,11 @@ function App() {
       const subset = cardsList.slice(0, numCards);
       return subset;
     }
-    setCardsThisLevel(pickCards());
+    // setCardsThisLevel(pickCards());
+    // NEW
+    shuffleCardsThisLevel(pickCards());
+    // Problem here... shuffle cards calls its own 'setCardsThisLevel', which is racing with
+    // the setCardsThisLevel right on top of this statement
   }, [level, cardsList])
 
   //sync theme change to local storage & text Logs
@@ -74,7 +89,7 @@ function App() {
 
 
   // Handlers
-  const handleCardClick = (character) => {
+  const handleCardClick = async (character) => {
     if(character.isClicked) { 
       // Game Over
       logToTextArea(`Game Over, Already Clicked ${character.name}`);
@@ -89,6 +104,7 @@ function App() {
       if (score + 1 > bestScore){
         setBestScore(score + 1);
       }
+      // setIsFlipped(true);
 
       if(score + 1 === cardsThisLevel.length){
         // next level
@@ -104,11 +120,17 @@ function App() {
             return c;
           }
         }))
+
+        // NEW
+        shuffleCardsThisLevel();
       }
     }
 
-    // Always suffle after every click
-    shuffleCardsThisLevel();
+    // Always suffle after every clicl
+    // shuffleCardsThisLevel();
+    // TODO TODO
+    // this line creates race condition problems with the card flipping animation state
+    // i think this state triggers a useEffect()... have to think about how to solve this.
   };
 
   const handleCardTheme = (e) => {
@@ -161,6 +183,7 @@ function App() {
             cardTheme={cardTheme}
             showNames={showNames}
             showCardsClicked={showCardsClicked}
+            isFlipped={isFlipped}
             />
           <GameOptions
             handleNextLevel={handleNextLevel}

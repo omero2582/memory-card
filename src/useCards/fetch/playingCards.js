@@ -25,7 +25,7 @@ export default function playingCards() {
   // console.log(fileName, fileNameWithoutExtension, nameWithSpaces, name)
 
     const character = {
-      id: i,
+      id: fileName,
       name,
       img: path,
       isClicked: false,

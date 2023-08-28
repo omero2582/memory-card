@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import Card from "../Card/Card";
 
-export default function Board ({error, isLoading, cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
-  
+export default function Board ({isFlipped, error, isLoading, cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
+
   if (error) return <h2 className='error'>ERROR loading Cards</h2>
   if (isLoading) return <h2>Loading...</h2>
 
@@ -11,6 +11,7 @@ export default function Board ({error, isLoading, cards, showCardsClicked, handl
       <h2 className="visually-hidden">Gameboard</h2>
       {cards.map(character =>
         <Card 
+          isFlipped={isFlipped}
           key={character.id}
           character={character}
           onClick={handleCardClick}
