@@ -8,6 +8,7 @@ import CardOptions from './components/CardOptions/CardOptions';
 import useCards from './useCards/useCards';
 import { ThemeContext } from './context/ThemeContext';
 import { flushSync } from 'react-dom';
+import SettingsModal from './components/SettingsModal/SettingsModal';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
@@ -17,7 +18,6 @@ function App() {
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
   
-  // const [cardsList, setCardsList] = useState([]);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
   const [cardTheme, setCardTheme] = useState('playingCards');
   
@@ -155,20 +155,43 @@ function App() {
     setTheme(t => (t === 'light') ? 'dark' : 'light')
   }
 
+
+  const modalRef = useRef(null);
+  
+  const openModal = () => {
+    modalRef.current.showModal();
+  };
+
+  const closeModal = () => {
+    modalRef.current.close()
+  };
+
+
+
   return (
     <ThemeContext.Provider value={{theme, toggleTheme}}>
       <div className={`container ${theme}`}>
         <main className='game'>
           <header>
-          <h1 className='main-title'>Memory Card Game</h1>
+          < h1 className='main-title'>Memory Card Game</h1>
             <p>Click on every Card once only, to get to the next level</p>
           </header>
-          <CardOptions
+          <SettingsModal
+            ref={modalRef}
+            closeModal={closeModal}
             cardTheme={cardTheme}
             handleCardTheme={handleCardTheme}
             showNames={showNames}
             handleShowNames={handleShowNames}
+            showAdvanced={showAdvanced}
+            handleShowAdvanced={handleShowAdvanced}
           />
+          {/* <CardOptions
+            cardTheme={cardTheme}
+            handleCardTheme={handleCardTheme}
+            showNames={showNames}
+            handleShowNames={handleShowNames}
+          /> */}
           <Scoreboard
             level={level}
             numCards={cardsThisLevel.length}
@@ -189,7 +212,10 @@ function App() {
             handleNextLevel={handleNextLevel}
             handleShowAdvanced={handleShowAdvanced}
             showAdvanced={showAdvanced}
+            openModal={openModal}
           />
+          
+          {/* <button onClick={openModal}>Settings</button> */}
           {showAdvanced && 
           <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
           }

@@ -18,7 +18,7 @@
 
 /**/
 .card {
-  width: 140px;
+  /* width: 140px; */
   height: 200px;
   perspective: 1000px;
   position: relative;

@@ -49,29 +49,25 @@ button:hover {
 }
 
 .game header {
-  /* margin: 5px 0px 20px; */
+  margin-bottom: 20px;
 }
 
 .Board {
   display: grid;
   /* grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
-  
-  grid-template-columns: repeat(auto-fit, 150px);
+  /* gap: 5px; */
+  grid-template-columns: repeat(auto-fit, 140px);
+  gap: 10px;
   /* grid-auto-flow: column; */
   justify-content: center;
 }
 
 .Footer {
   margin-top: auto;
-  padding: 20px;
-  padding-top: 10px;
-  background-color: #f5f5f5;
+  padding: 14px;
+  background-color: hsl(0, 0%, 88%);
   font-size: 1rem;
   text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .Footer.dark{
@@ -79,6 +75,3 @@ button:hover {
 }
 
 
-.toggle-theme > *{
-  border: 1px solid black;
-}
