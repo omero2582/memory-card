@@ -1,0 +1,80 @@
+.SettingsModal{
+  margin: auto;
+  border: 2px solid black;
+  border: none;
+  border-radius: 4px;
+}
+
+.SettingsModal::backdrop{
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.Settings{
+  display: grid;
+  grid-auto-flow: row;
+  gap: 10px;
+  padding: 20px 30px;
+  /**/
+  /* justify-items: start;
+  align-content: center; */
+}
+
+.Settings.dark{
+  background-color: hsl(210, 34%, 10%);
+  background-color: rgb(26, 27, 30);
+  color:#F7F9F9;
+}
+
+.Settings > section {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: start;
+}
+
+.Settings label {
+  font-size: 1.32rem;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.Settings select {
+  font-size: 1.05rem;
+}
+
+.Settings input[type="checkbox"]{
+  width: 20px;
+  height: 20px;
+}
+
+
+
+.toggle-theme > *{
+  border: 1px solid black;
+}
+
+.Settings #show-names:checked{
+}
+
+.Settings #show-names:hover{
+  cursor: pointer;
+}
+
+.Settings .close{
+  justify-self: center;
+  padding: 6px 20px;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.Settings .close {
+  background-color: hsl(209, 77%, 43%);
+  color: rgb(255, 255, 255);
+}
+
+.Settings .close:hover {
+  background-color: hsl(209, 75%, 38%);
+}
