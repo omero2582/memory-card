@@ -5,9 +5,46 @@
   border-radius: 4px;
 }
 
+.SettingsModal[open] {
+  animation: fadein 250ms;
+  /* opacity: 1;
+  scale: 1;
+  transition: all 2s; */
+}
+
+@keyframes fadein{
+  0%{
+    scale: 0;
+    opacity:0;
+  }
+  100%{
+    scale: 1;
+    opacity:1;
+  }
+}
+
+.SettingsModal.closing {
+  animation: fadeout 250ms;
+  /* opacity: 0;
+  scale: 0;
+  transition: all 2s; */
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 0;
+  }
+}
+
 .SettingsModal::backdrop{
   /* background-color: rgba(0, 0, 0, 0.1); */
   background-color: rgba(0, 0, 0, 0.4);
+
 }
 
 .Settings{

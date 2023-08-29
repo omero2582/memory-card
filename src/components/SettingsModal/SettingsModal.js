@@ -3,17 +3,19 @@ import './SettingsModal.css'
 import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
 import { useRef } from 'react';
+import { useState } from 'react';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   const { 
     closeModal,
     cardTheme, handleCardTheme,
     showNames, handleShowNames,
-    showAdvanced, handleShowAdvanced} = props;
+    showAdvanced, handleShowAdvanced,
+    isModalClosing} = props;
   const {theme, toggleTheme} = useContext(ThemeContext);
 
   return (
-    <dialog ref={ref} className='SettingsModal' onClick={closeModal}>
+    <dialog ref={ref} className={`SettingsModal ${isModalClosing ? 'closing' : '' }`} onClick={closeModal}>
       <section className={`Settings ${theme}`} onClick={e => e.stopPropagation()}>
         <section className="game-theme">
           <label htmlFor="game-theme" className="game-theme-title">Card Theme:</label>

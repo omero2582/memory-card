@@ -4,7 +4,6 @@ import Board from './components/Board/Board';
 import GameOptions from './components/GameOptions/GameOptions';
 import Advanced from './components/Advanced/Advanced';
 import { useEffect, useState, useRef } from 'react';
-import CardOptions from './components/CardOptions/CardOptions';
 import useCards from './useCards/useCards';
 import { ThemeContext } from './context/ThemeContext';
 import { flushSync } from 'react-dom';
@@ -157,14 +156,24 @@ function App() {
 
 
   const modalRef = useRef(null);
+  const [isModalClosing, setIsModalClosing] = useState(false);
   
   const openModal = () => {
+    setIsModalClosing(false);
     modalRef.current.showModal();
   };
 
   const closeModal = () => {
-    modalRef.current.close()
+    // modalRef.current.addEventListener("transitionend", handleTransitionEnd);
+    setIsModalClosing(true);
+    modalRef.current.addEventListener("animationend", handleTransitionEnd);
   };
+
+  const handleTransitionEnd = () => {
+    console.log('end transition')
+    modalRef.current.removeEventListener("animationend", handleTransitionEnd);
+    modalRef.current.close();
+  }
 
 
 
@@ -185,13 +194,9 @@ function App() {
             handleShowNames={handleShowNames}
             showAdvanced={showAdvanced}
             handleShowAdvanced={handleShowAdvanced}
+            isModalClosing= {isModalClosing}
+            setIsModalClosing={setIsModalClosing}
           />
-          {/* <CardOptions
-            cardTheme={cardTheme}
-            handleCardTheme={handleCardTheme}
-            showNames={showNames}
-            handleShowNames={handleShowNames}
-          /> */}
           <Scoreboard
             level={level}
             numCards={cardsThisLevel.length}
@@ -207,15 +212,13 @@ function App() {
             showNames={showNames}
             showCardsClicked={showCardsClicked}
             isFlipped={isFlipped}
-            />
+          />
           <GameOptions
             handleNextLevel={handleNextLevel}
             handleShowAdvanced={handleShowAdvanced}
             showAdvanced={showAdvanced}
             openModal={openModal}
           />
-          
-          {/* <button onClick={openModal}>Settings</button> */}
           {showAdvanced && 
           <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
           }
@@ -231,23 +234,3 @@ function App() {
 }
 
 export default App;
-
-function preloadImages(imageUrls) {
-  return Promise.all(
-    imageUrls.map(url => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = url;
-      });
-    })
-  );
-  }
-  // old mapping solution instead of promises. would need to adjust code to fit this fn
-  // const images = shuffled.map(char => {
-  //   const img = new Image();
-  //   img.src = char.img;
-  //   return img;
-  // });
-  /* */
