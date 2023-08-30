@@ -9,28 +9,24 @@ import { ThemeContext } from './context/ThemeContext';
 import { flushSync } from 'react-dom';
 import SettingsModal from './components/SettingsModal/SettingsModal';
 import { useSettingsContext } from './context/SettingsContext';
+import { useContext } from 'react';
+import { LogContext } from './context/LogContext';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
 
-  const {cardTheme, showNames, showAdvanced, showCardsClicked} = useSettingsContext();
-  
-
-  const [logs, setLogs] = useState([]);
+  const {logs, logToTextArea} = useContext(LogContext);
+  const {theme} = useContext(ThemeContext);
+  const {cardTheme, showAdvanced} = useSettingsContext();
 
   const [isFlipped, setIsFlipped] = useState(false);
-  
-  
-  const logToTextArea = (message) => {
-    setLogs(l => [...l, message]);
-  }
+
 
   const resetCardsClicked = () => {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
@@ -67,12 +63,12 @@ function App() {
   useEffect(() => {
     logToTextArea(`Card theme set: ${cardTheme}`);
     setScore(0);
-  },[cardTheme]);
+  },[cardTheme, logToTextArea]);
   
-  // every level
-  useEffect(() => {
-    logToTextArea(`Level ${level}`);
-  }, [level])
+  // // every level
+  // useEffect(() => {
+  //   logToTextArea(`Level ${level}`);
+  // }, [level, logToTextArea])
 
   // everytime level or cardsList changes, set cardsThisLevel
   useEffect(() => {
@@ -89,14 +85,25 @@ function App() {
     // the setCardsThisLevel right on top of this statement
   }, [level, cardsList])
 
-  //sync theme change to local storage & text Logs
-  useEffect(() => {
-    localStorage.setItem('theme', theme)
-    logToTextArea(`Color theme set to: ${theme}`);
-  }, [theme])
+
 
 
   // Handlers
+  const nextLevel = () => {
+    logToTextArea(`Level ${level + 1}`);
+    setLevel(l => l + 1);
+    setScore(0);
+    // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
+  }
+
+  const gameOver = (character) => {
+    logToTextArea(`Game Over, Already Clicked ${character.name}`);
+    // resetCardsClicked();
+    setScore(0);
+    setLevel(1);
+    setCardsList(c => shuffleArr(c));
+  }
+
   const handleCardClick = async (character) => {
     if(character.isClicked) { 
       gameOver(character);
@@ -133,61 +140,15 @@ function App() {
     // i think this state triggers a useEffect()... have to think about how to solve this.
   };
 
-  const nextLevel = () => {
-    setLevel(l => l + 1);
-    setScore(0);
-    // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
-  }
-
-  const gameOver = (character) => {
-    logToTextArea(`Game Over, Already Clicked ${character.name}`);
-    // resetCardsClicked();
-    setScore(0);
-    setLevel(1);
-    setCardsList(c => shuffleArr(c));
-  }
-
-  const toggleTheme = () => {
-    setTheme(t => (t === 'light') ? 'dark' : 'light')
-  }
-
-
-  const modalRef = useRef(null);
-  const [isModalClosing, setIsModalClosing] = useState(false);
-  
-  const openModal = () => {
-    setIsModalClosing(false);
-    modalRef.current.showModal();
-  };
-
-  const closeModal = () => {
-    // modalRef.current.addEventListener("transitionend", handleTransitionEnd);
-    modalRef.current.addEventListener("animationend", handleTransitionEnd);
-    setIsModalClosing(true);
-  };
-
-  const handleTransitionEnd = () => {
-    console.log('end transition')
-    modalRef.current.removeEventListener("animationend", handleTransitionEnd);
-    modalRef.current.close();
-  }
-
 
 
   return (
-    <ThemeContext.Provider value={{theme, toggleTheme}}>
       <div className={`container ${theme}`}>
         <main className='game'>
           <header>
           < h1 className='main-title'>Memory Card Game</h1>
             <p>Click on every Card once only, to get to the next level</p>
           </header>
-          <SettingsModal
-            ref={modalRef}
-            closeModal={closeModal}
-            isModalClosing= {isModalClosing}
-            setIsModalClosing={setIsModalClosing}
-          />
           <Scoreboard
             level={level}
             numCards={cardsThisLevel.length}
@@ -201,15 +162,10 @@ function App() {
             handleCardClick={handleCardClick}
             isFlipped={isFlipped}
             cardTheme={cardTheme}
-            showNames={showNames}
-            showCardsClicked={showCardsClicked}
           />
-          <GameOptions
-            handleNextLevel={nextLevel}
-            openModal={openModal}
-          />
+          <GameOptions handleNextLevel={nextLevel}/>
           {showAdvanced && 
-          <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)}/>
+          <Advanced cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)}/>
           }
         
         </main>
@@ -217,7 +173,6 @@ function App() {
           <p>Sebastian Cevallos</p>
         </footer>
       </div>
-    </ThemeContext.Provider>
     //{JSON.stringify(cardsClicked, null, 2)}
   );
 }

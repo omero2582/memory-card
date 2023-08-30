@@ -5,14 +5,19 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useSettingsContext } from '../../context/SettingsContext';
+import { useEffect } from 'react';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
-  const { closeModal,isModalClosing} = props;
   const {theme, toggleTheme} = useContext(ThemeContext);
   const {
     cardTheme, handleCardTheme,
     showNames, handleShowNames,
     showAdvanced, handleShowAdvanced} = useSettingsContext();
+    
+  const {isModalClosing, closeModal} = props;
+  
+
+
 
   return (
     <dialog ref={ref} className={`SettingsModal ${isModalClosing ? 'closing' : '' }`} onClick={closeModal}>

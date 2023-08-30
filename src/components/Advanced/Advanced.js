@@ -1,7 +1,10 @@
 import { useEffect, useRef } from "react";
 import './Advanced.css'
-export default function Advanced({logs, cardsClicked}) {
+import { useLogContext } from "../../context/LogContext";
+export default function Advanced({cardsClicked}) {
+  const { logs } = useLogContext();
   const textareaRef = useRef();
+  
   useEffect(() => {
     if(textareaRef.current){
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight;

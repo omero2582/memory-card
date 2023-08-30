@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import Card from "../Card/Card";
+import { useSettingsContext } from "../../context/SettingsContext";
 
-export default function Board ({isFlipped, error, isLoading, cards, showCardsClicked, handleCardClick, cardTheme, showNames}) {
-
+export default function Board ({isFlipped, error, isLoading, cards, handleCardClick, cardTheme}) {
+  const {showNames, showCardsClicked} = useSettingsContext();
+  
   if (error) return <h2 className='error'>ERROR loading Cards</h2>
   if (isLoading) return <h2>Loading...</h2>
 
