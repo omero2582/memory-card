@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import './Advanced.css'
-export default function Advanced({logs, cardsClicked, textareaRef}) {
-
+export default function Advanced({logs, cardsClicked}) {
+  const textareaRef = useRef();
   useEffect(() => {
     if(textareaRef.current){
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
     }
-  }, [logs, textareaRef])
+  }, [logs])
 
   return (
     <section className="Advanced">

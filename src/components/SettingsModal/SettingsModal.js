@@ -4,15 +4,15 @@ import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
 import { useRef } from 'react';
 import { useState } from 'react';
+import { useSettingsContext } from '../../context/SettingsContext';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
-  const { 
-    closeModal,
+  const { closeModal,isModalClosing} = props;
+  const {theme, toggleTheme} = useContext(ThemeContext);
+  const {
     cardTheme, handleCardTheme,
     showNames, handleShowNames,
-    showAdvanced, handleShowAdvanced,
-    isModalClosing} = props;
-  const {theme, toggleTheme} = useContext(ThemeContext);
+    showAdvanced, handleShowAdvanced} = useSettingsContext();
 
   return (
     <dialog ref={ref} className={`SettingsModal ${isModalClosing ? 'closing' : '' }`} onClick={closeModal}>

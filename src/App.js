@@ -8,24 +8,22 @@ import useCards from './useCards/useCards';
 import { ThemeContext } from './context/ThemeContext';
 import { flushSync } from 'react-dom';
 import SettingsModal from './components/SettingsModal/SettingsModal';
+import { useSettingsContext } from './context/SettingsContext';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [level, setLevel] = useState(1);
-  
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
-  const [cardTheme, setCardTheme] = useState('playingCards');
+
+  const {cardTheme, showNames, showAdvanced, showCardsClicked} = useSettingsContext();
   
-  const [showNames, setShowNames] = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [showCardsClicked, setShowCardsClicked] = useState(false);
 
   const [logs, setLogs] = useState([]);
-  const textareaRef = useRef();
 
   const [isFlipped, setIsFlipped] = useState(false);
   
@@ -135,19 +133,6 @@ function App() {
     // i think this state triggers a useEffect()... have to think about how to solve this.
   };
 
-  const handleCardTheme = (e) => {
-    setCardTheme(e.target.value);
-  }
-
-  const handleShowNames = (e) => {
-    setShowNames(e.target.checked);
-  }
-
-  const handleShowAdvanced = () => {
-    setShowAdvanced(s => !s);
-    setShowCardsClicked(s => !s);
-  }
-
   const nextLevel = () => {
     setLevel(l => l + 1);
     setScore(0);
@@ -177,8 +162,8 @@ function App() {
 
   const closeModal = () => {
     // modalRef.current.addEventListener("transitionend", handleTransitionEnd);
-    setIsModalClosing(true);
     modalRef.current.addEventListener("animationend", handleTransitionEnd);
+    setIsModalClosing(true);
   };
 
   const handleTransitionEnd = () => {
@@ -202,12 +187,6 @@ function App() {
             closeModal={closeModal}
             isModalClosing= {isModalClosing}
             setIsModalClosing={setIsModalClosing}
-            cardTheme={cardTheme}
-            handleCardTheme={handleCardTheme}
-            showNames={showNames}
-            handleShowNames={handleShowNames}
-            showAdvanced={showAdvanced}
-            handleShowAdvanced={handleShowAdvanced}
           />
           <Scoreboard
             level={level}
@@ -230,7 +209,7 @@ function App() {
             openModal={openModal}
           />
           {showAdvanced && 
-          <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)} textareaRef={textareaRef}/>
+          <Advanced logs={logs} cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)}/>
           }
         
         </main>
