@@ -7,7 +7,7 @@ import { mdiSkipNext } from '@mdi/js';
 
 
 
-export default function GameOptions ({ openModal, handleNextLevel, handleShowAdvanced, showAdvanced}) {
+export default function GameOptions ({ openModal, handleNextLevel}) {
   const {theme} = useContext(ThemeContext);
   
   return (
@@ -17,7 +17,6 @@ export default function GameOptions ({ openModal, handleNextLevel, handleShowAdv
         <Icon path={mdiCog} size={1.2} />
         Settings
       </button>
-      {/* <button onClick={handleShowAdvanced}>{showAdvanced ? 'Hide' : 'Show'} Advanced</button> */}
       <button onClick={handleNextLevel}>
         <Icon path={mdiSkipNext} size={1.2} />
         Next Level

@@ -36,6 +36,17 @@ function App() {
 
   const resetCardsClicked = () => {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
+    // Seems I dont need this, since everytime level or cardTheme changes, I am
+    // running an Effect that takes a subset out of the initial cardsList, and
+    // sets that as the cardsThisLevel. But cardsList has 'isClicked: false' 
+    // and this never changes
+    // TODO this is mostly right reasoning, but TODO figure out why I use
+    // setCardsList in my code below when "Game Over"
+    // I know why I do it, but I think the reason I still done need to run 
+    // resetsCardsClicked() there is because I am also changing the level
+    // on game over, which re-runs the effect to pick cards.
+    // And again, the effect to pick cards always takes the cards out of the
+    // original cardsList whose values of 'isClicked: false' never change
   }
 
   const shuffleCardsThisLevel = async (newCards) => {
@@ -62,7 +73,7 @@ function App() {
   
   // every level
   useEffect(() => {
-    logToTextArea(`Round ${level}`);
+    logToTextArea(`Level ${level}`);
   }, [level])
 
   // everytime level or cardsList changes, set cardsThisLevel
@@ -90,12 +101,7 @@ function App() {
   // Handlers
   const handleCardClick = async (character) => {
     if(character.isClicked) { 
-      // Game Over
-      logToTextArea(`Game Over, Already Clicked ${character.name}`);
-      resetCardsClicked();
-      setScore(0);
-      setLevel(1);
-      setCardsList(c => shuffleArr(c));
+      gameOver(character);
     }else {
       // sucessful selection
       logToTextArea(`${character.name} selected`);
@@ -106,10 +112,7 @@ function App() {
       // setIsFlipped(true);
 
       if(score + 1 === cardsThisLevel.length){
-        // next level
-        resetCardsClicked();
-        setLevel(l => l + 1);
-        setScore(0);
+        nextLevel();
       } else {
         // continue on same level
         setCardsThisLevel(cards => cards.map(c => {
@@ -145,9 +148,18 @@ function App() {
     setShowCardsClicked(s => !s);
   }
 
-  const handleNextLevel = () => {
+  const nextLevel = () => {
     setLevel(l => l + 1);
     setScore(0);
+    // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
+  }
+
+  const gameOver = (character) => {
+    logToTextArea(`Game Over, Already Clicked ${character.name}`);
+    // resetCardsClicked();
+    setScore(0);
+    setLevel(1);
+    setCardsList(c => shuffleArr(c));
   }
 
   const toggleTheme = () => {
@@ -188,14 +200,14 @@ function App() {
           <SettingsModal
             ref={modalRef}
             closeModal={closeModal}
+            isModalClosing= {isModalClosing}
+            setIsModalClosing={setIsModalClosing}
             cardTheme={cardTheme}
             handleCardTheme={handleCardTheme}
             showNames={showNames}
             handleShowNames={handleShowNames}
             showAdvanced={showAdvanced}
             handleShowAdvanced={handleShowAdvanced}
-            isModalClosing= {isModalClosing}
-            setIsModalClosing={setIsModalClosing}
           />
           <Scoreboard
             level={level}
@@ -208,15 +220,13 @@ function App() {
             isLoading={isLoading}
             cards={cardsThisLevel}
             handleCardClick={handleCardClick}
+            isFlipped={isFlipped}
             cardTheme={cardTheme}
             showNames={showNames}
             showCardsClicked={showCardsClicked}
-            isFlipped={isFlipped}
           />
           <GameOptions
-            handleNextLevel={handleNextLevel}
-            handleShowAdvanced={handleShowAdvanced}
-            showAdvanced={showAdvanced}
+            handleNextLevel={nextLevel}
             openModal={openModal}
           />
           {showAdvanced && 
