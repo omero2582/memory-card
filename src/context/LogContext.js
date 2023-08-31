@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const LogContext = createContext();
 

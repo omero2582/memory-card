@@ -17,16 +17,16 @@ const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 function App() {
   
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
   const [level, setLevel] = useState(1);
   const [cardsThisLevel, setCardsThisLevel] = useState([]);
 
-  const {logs, logToTextArea} = useContext(LogContext);
+  const {logToTextArea} = useContext(LogContext);
   const {theme} = useContext(ThemeContext);
   const {cardTheme, showAdvanced} = useSettingsContext();
 
   const [isFlipped, setIsFlipped] = useState(false);
-
+  const cardsClicked = cardsThisLevel.filter(c => c.isClicked === true);
 
   const resetCardsClicked = () => {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
@@ -91,8 +91,8 @@ function App() {
   // Handlers
   const nextLevel = () => {
     logToTextArea(`Level ${level + 1}`);
-    setLevel(l => l + 1);
     setScore(0);
+    setLevel(l => l + 1);
     // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
   }
 
@@ -111,8 +111,8 @@ function App() {
       // sucessful selection
       logToTextArea(`${character.name} selected`);
       setScore(s => s + 1);
-      if (score + 1 > bestScore){
-        setBestScore(score + 1);
+      if (score + 1 > highScore){
+        setHighScore(score + 1);
       }
       // setIsFlipped(true);
 
@@ -141,19 +141,20 @@ function App() {
   };
 
 
-
+  
   return (
       <div className={`container ${theme}`}>
         <main className='game'>
           <header>
-          < h1 className='main-title'>Memory Card Game</h1>
+          < h1 className='main-title'>Card Memo</h1>
             <p>Click on every Card once only, to get to the next level</p>
           </header>
           <Scoreboard
             level={level}
             numCards={cardsThisLevel.length}
             score={score}
-            bestScore={bestScore}
+            highScore={highScore}
+            numClicked={cardsClicked.length}
           />
           <Board
             error={error}
@@ -165,7 +166,7 @@ function App() {
           />
           <GameOptions handleNextLevel={nextLevel}/>
           {showAdvanced && 
-          <Advanced cardsClicked={cardsThisLevel.filter(c => c.isClicked === true)}/>
+          <Advanced cardsClicked={cardsClicked}/>
           }
         
         </main>

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import Card from "../Card/Card";
 import { useSettingsContext } from "../../context/SettingsContext";
+import './Board.css'
 
 export default function Board ({isFlipped, error, isLoading, cards, handleCardClick, cardTheme}) {
   const {showNames, showCardsClicked} = useSettingsContext();

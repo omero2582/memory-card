@@ -4,24 +4,12 @@
   --card-hover: rgb(0, 255, 255);
 }
 
-.Card {
-  background-color: var(--card-background);
-  border: 3px solid black;
-  /* display: grid;
-  justify-items: center;
-  padding: 6px 0px 10px; */
-}
-
-.Card:hover:not(.clicked){
-  background-color: var(--card-hover);
-}
-
 /**/
 .card {
   /* width: 140px; */
-  height: 200px;
-  perspective: 1000px;
   position: relative;
+  min-height: 200px;
+  perspective: 1000px;
 }
 
 .card-inner {
@@ -48,43 +36,48 @@
   align-items: center;
 }
 
-.card-front {
-  transform: rotateY(0deg);
-}
-
 .card-back {
   transform: rotateY(180deg);
 }
-
-/**/
 
 .card-back img {
   width: 100%;
   height: auto;
 }
 
-.Card.showClickedCheat {
+.card-front {
+  background-color: var(--card-background);
+  border: 3px solid black;
+}
+
+.card-front:hover:not(.clicked){
+  background-color: var(--card-hover);
+}
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-front.showClickedCheat {
   background-color:salmon;
 }
 
-.Card .card-name {
+.card-front .card-name {
   font-size: 20px;
-  align-self: center;
-  /* padding: 0px 5px; */
-  /* justify-self: stretch; */
-  /* TODO TODO, have to think about whether I want this line above. It makes some titles look not crammed,
-  but maybe it is better to increase the card size a bit ?*/ 
-  /* padding-bottom: 4px; */
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.Card .card-img {
+.card-front .card-img {
   width: 100%;
-  max-width: 90px;
+  /* max-width: 90px; */
+  max-width: 85%;
   height: auto;
   /**/
   margin-top: 6px;
 }
 
-.Card .playingCards {
+.card-front .playingCards {
   background-color: white;
+  margin-top: 0px;
 }

@@ -1,12 +1,49 @@
 .Scoreboard {
   display: grid;
   grid-auto-flow: column;
-  margin-bottom: 5px;
+  justify-content: space-evenly;
+  margin-bottom: 6px;
+}
+
+.Scoreboard .label {
+  font-size: 1.44rem;   /*23.04 px*/
+  font-weight:500;
 }
 
 .Scoreboard div{
-  gap: 30px;
+  column-gap: 30px;
   display: grid;
   grid-auto-flow: column;
   justify-content: center;
+  
+}
+
+.Scoreboard div > .stat {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: start;
+  column-gap: 7px;
+}
+
+.Scoreboard .label.numCards {
+  display: flex;
+}
+
+.Scoreboard .num {
+  font-weight: 500;
+  font-size: 1.44rem;   /*23.04 px*/
+}
+
+@media (max-width: 600px){
+  .Scoreboard div{
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: center;
+  }
+
+  .Scoreboard .stat.high-score{
+    order: -1;
+  }
+  
 }
