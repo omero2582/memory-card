@@ -50,16 +50,39 @@
   border: 3px solid black;
 }
 
-.card-front:hover:not(.clicked){
-  background-color: var(--card-hover);
+.card-front:disabled {
+  color: black;
+  /*
+  fixes default behavior making text unreadable
+  it looked ok when the card was flipping, but when GameOver is showing board with showNames,
+  it looks bad
+  */
 }
+
+.card-front:hover:not(.clicked):not(.game-over){
+  background-color: var(--card-hover);
+  /* box-shadow: 0 0 6px 6px yellow; */
+  box-shadow: 0 0 6px 2px yellow;
+  border: 2px solid yellow;
+}
+
+.card-front.game-over:hover{
+  cursor: default;
+}
+
+.card-front.showClickedCheat:not(.double-clicked) {
+  background-color:salmon;
+}
+
+
+.card-front.double-clicked{
+  background-color: #7048E8;
+}
+
 .card-front {
   transform: rotateY(0deg);
 }
 
-.card-front.showClickedCheat {
-  background-color:salmon;
-}
 
 .card-front .card-name {
   font-size: 20px;
@@ -80,4 +103,33 @@
 .card-front .playingCards {
   background-color: white;
   margin-top: 0px;
+}
+
+/*yolo*/
+.x {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* transform: rotate(55deg); */
+  left: 12px;
+  bottom: 19px;
+}
+
+.x::before,
+.x::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 119%;
+  background-color: black;
+}
+
+.x::before {
+  left: 40%;
+  transform: rotate(-35deg);
+}
+
+.x::after {
+  transform: rotate(35deg);
+  right: 58%;
 }

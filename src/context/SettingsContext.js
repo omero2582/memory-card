@@ -16,9 +16,14 @@ export const SettingsProvider = ({ children }) => {
     setShowNames(e.target.checked);
   }
 
-  const handleShowAdvanced = () => {
+  const toggleShowAdvanced = () => {
     setShowAdvanced(s => !s);
     setShowCardsClicked(s => !s);
+  }
+
+  const handleShowAdvanced = (value=true) => {
+    setShowAdvanced(value);
+    setShowCardsClicked(value);
   }
 
   return (
@@ -26,7 +31,7 @@ export const SettingsProvider = ({ children }) => {
       value={{
         cardTheme, handleCardTheme,
         showNames, handleShowNames,
-        showAdvanced, handleShowAdvanced,
+        showAdvanced, toggleShowAdvanced, handleShowAdvanced,
         showCardsClicked,
       }}>
         {children}

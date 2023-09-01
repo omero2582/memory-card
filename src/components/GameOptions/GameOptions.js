@@ -6,10 +6,11 @@ import { useContext } from 'react';
 import { mdiSkipNext } from '@mdi/js';
 import { useState, useRef } from 'react';
 import SettingsModal from '../SettingsModal/SettingsModal';
+import { mdiPlus } from '@mdi/js';
 
 
 
-export default function GameOptions ({ handleNextLevel}) {
+export default function GameOptions ({ handleNextLevel, handleNewGame, isGameOver }) {
   const {theme} = useContext(ThemeContext);
   const modalRef = useRef(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
@@ -39,10 +40,18 @@ export default function GameOptions ({ handleNextLevel}) {
           <Icon path={mdiCog} size={1.2} />
           Settings
         </button>
+        { !isGameOver &&
         <button onClick={handleNextLevel}>
           <Icon path={mdiSkipNext} size={1.2} />
           Next Level
         </button>
+        }
+        { isGameOver &&
+        <button onClick={handleNewGame} className='new-game'>
+        <Icon path={mdiPlus} size={1.2} />
+          New Game
+        </button>
+        }
       </section>
     </>
     

@@ -23,10 +23,11 @@ function App() {
 
   const {logToTextArea} = useContext(LogContext);
   const {theme} = useContext(ThemeContext);
-  const {cardTheme, showAdvanced} = useSettingsContext();
+  const {cardTheme, showAdvanced, handleShowAdvanced} = useSettingsContext();
 
   const [isFlipped, setIsFlipped] = useState(false);
   const cardsClicked = cardsThisLevel.filter(c => c.isClicked === true);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const resetCardsClicked = () => {
     setCardsThisLevel(cards => cards.map(c => ({...c, isClicked: false})));
@@ -96,13 +97,29 @@ function App() {
     // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
   }
 
-  const gameOver = (character) => {
-    logToTextArea(`Game Over, Already Clicked ${character.name}`);
+  const newGame = () => {
     // resetCardsClicked();
     setScore(0);
     setLevel(1);
     setCardsList(c => shuffleArr(c));
+    handleShowAdvanced(false)
+    setIsGameOver(false)
   }
+
+  const gameOver = (character) => {
+    logToTextArea(`Game Over, Already Clicked ${character.name}`);
+    setIsGameOver(true);
+    setCardsThisLevel(cards => cards.map(c => {
+      if(c.id === character.id){
+        return ({...character, isDoubleClicked: true})
+      }else {
+        return c;
+      }
+    }))
+    handleShowAdvanced(true);
+    // newGame();
+  }
+
 
   const handleCardClick = async (character) => {
     if(character.isClicked) { 
@@ -157,6 +174,7 @@ function App() {
             numClicked={cardsClicked.length}
           />
           <Board
+            isGameOver={isGameOver}
             error={error}
             isLoading={isLoading}
             cards={cardsThisLevel}
@@ -164,7 +182,7 @@ function App() {
             isFlipped={isFlipped}
             cardTheme={cardTheme}
           />
-          <GameOptions handleNextLevel={nextLevel}/>
+          <GameOptions handleNextLevel={nextLevel} isGameOver={isGameOver} handleNewGame={newGame}/>
           {showAdvanced && 
           <Advanced cardsClicked={cardsClicked}/>
           }

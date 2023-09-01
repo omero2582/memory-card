@@ -14,7 +14,7 @@ const playingCardsMap = {
 
 }
 
-export default function Card ({isFlipped, character, onClick, cardTheme, showNames, showClickedCheat}) {
+export default function Card ({isGameOver, isFlipped, character, onClick, cardTheme, showNames, showClickedCheat}) {
   const {name, id, img} = character;
   let newName = name;
 
@@ -43,12 +43,17 @@ export default function Card ({isFlipped, character, onClick, cardTheme, showNam
     // need to add this somewhere^^
   };
   return (
-    <div className={`card ${isFlipped ? 'flipped' : ''}`}>
+    <div className={`card ${isFlipped ? 'flipped' : ''}` }>
       <div className="card-inner">
-        <button title={name} disabled={isFlipped} className={`card-front ${showClickedCheat ? 'showClickedCheat' : '' }`} onClick={handleClick}>
+        <button 
+          title={name} 
+          disabled={isFlipped || isGameOver} 
+          className={`card-front ${showClickedCheat ? 'showClickedCheat' : '' } ${isGameOver ? 'game-over' : ''} ${character.isDoubleClicked ? 'double-clicked' : ''}`}
+          onClick={handleClick}>
           {showNames && <h3 className="card-name">{newName}</h3>}
           <img className={`card-img ${cardTheme}`} alt={name} src={img}/>
         </button>
+        {character.isDoubleClicked && <div className="x"></div>}
         <div className="card-back">
           <img src={process.env.PUBLIC_URL + '/CardBacks/yugioh.png'} alt="Back of the card" />
         </div>

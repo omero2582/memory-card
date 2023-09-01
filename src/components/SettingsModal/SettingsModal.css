@@ -84,6 +84,7 @@
 .Settings input[type="checkbox"]{
   width: 20px;
   height: 20px;
+  accent-color: hsl(209, 77%, 43%);
 }
 
 

@@ -9,7 +9,7 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   const {
     cardTheme, handleCardTheme,
     showNames, handleShowNames,
-    showAdvanced, handleShowAdvanced} = useSettingsContext();
+    showAdvanced, toggleShowAdvanced} = useSettingsContext();
     
   const {isModalClosing, closeModal} = props;
   
@@ -50,7 +50,7 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
         </section>
         <section>
         <label htmlFor="show-advanced">Show Advanced</label>
-          <input id="show-advanced" type="checkbox" checked={showAdvanced} onChange={handleShowAdvanced}></input>
+          <input id="show-advanced" type="checkbox" checked={showAdvanced} onChange={toggleShowAdvanced}></input>
         </section>
         <button className='close' onClick={closeModal}>Close</button>
       </section>

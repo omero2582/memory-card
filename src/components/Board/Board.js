@@ -3,7 +3,7 @@ import Card from "../Card/Card";
 import { useSettingsContext } from "../../context/SettingsContext";
 import './Board.css'
 
-export default function Board ({isFlipped, error, isLoading, cards, handleCardClick, cardTheme}) {
+export default function Board ({ isGameOver, isFlipped, error, isLoading, cards, handleCardClick, cardTheme}) {
   const {showNames, showCardsClicked} = useSettingsContext();
   
   if (error) return <h2 className='error'>ERROR loading Cards</h2>
@@ -14,6 +14,7 @@ export default function Board ({isFlipped, error, isLoading, cards, handleCardCl
       <h2 className="visually-hidden">Gameboard</h2>
       {cards.map(character =>
         <Card 
+          isGameOver={isGameOver}
           isFlipped={isFlipped}
           key={character.id}
           character={character}
