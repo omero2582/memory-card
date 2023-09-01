@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/memory-card/static/css/main.f156abea.css",
+    "main.css": "/memory-card/static/css/main.8d4b0d9a.css",
     "main.js": "/memory-card/static/js/main.6919423f.js",
     "static/media/king_of_hearts.png": "/memory-card/static/media/king_of_hearts.675074aa3aa1f24a51c6.png",
     "static/media/king_of_diamonds.png": "/memory-card/static/media/king_of_diamonds.6fe8c35703396c58f084.png",
@@ -125,11 +125,11 @@
     "static/media/2_of_clubs.png": "/memory-card/static/media/2_of_clubs.9cab14d526ace831b9f0.png",
     "static/media/2_of_spades.png": "/memory-card/static/media/2_of_spades.9436c10d350d441f42a7.png",
     "index.html": "/memory-card/index.html",
-    "main.f156abea.css.map": "/memory-card/static/css/main.f156abea.css.map",
+    "main.8d4b0d9a.css.map": "/memory-card/static/css/main.8d4b0d9a.css.map",
     "main.6919423f.js.map": "/memory-card/static/js/main.6919423f.js.map"
   },
   "entrypoints": [
-    "static/css/main.f156abea.css",
+    "static/css/main.8d4b0d9a.css",
     "static/js/main.6919423f.js"
   ]
 }
