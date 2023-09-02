@@ -11,8 +11,22 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
     showNames, handleShowNames,
     showAdvanced, toggleShowAdvanced} = useSettingsContext();
     
-  const {isModalClosing, closeModal} = props;
+  const {isModalClosing, closeModal, isGameOver, newGame} = props;
   
+  // TODO TODO. read comment below in JSX. I added this handler below as a quick band-aid fix.
+  // Right now, I am prop drilling isGameOver and newGame()
+  // I need to change this by putting all the game logic into its separate context, so that I dont have to drill them 
+  // into here like this, and handleCardTheme can just have access to isGameOver and newGame from a context.
+  // I also prop drilled isGameOver in some other place too.
+  // Can maybe also just bootleg move the SettingsProvider INSIDE of App.js instead of outside, then pass it isGameOver
+  // and newGame(). That would solve this problem, and maybe other places where they were prop drilled??
+  // not sure. Really have to look and think about whether its better to have global context access to the game vars and handlers
+  const onChange = (e) => {
+    handleCardTheme(e);
+    if(isGameOver){
+      newGame();
+    }
+  }
 
 
 
@@ -24,7 +38,12 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
           <select 
             id="game-theme" 
             value={cardTheme || 'league'}  // sets league as default, without changing the url
-            onChange={handleCardTheme}>
+            onChange={onChange}  //was handleCardTheme
+            // TODO add if(GameOver) => newGame. I can put it on the effect itself inside App.js but that feels wrong & missuse of useEffect
+            // yea... and the handler is in themeContext.. this makes me think that ther should be a GameContext wrapped around Settings,
+            // AT LEAST containing 'isGameOver' and 'newGame()'. but bc of the vriables these handle, prob ALL the gamestate would go on this context,
+            // besides things to go with rendering or display logic. <- that would stay inside App.js which would be renaemd to <GameView>
+          > 
             <option value='playingCards'>Playing Cards</option>
             <option value='league'>League of Legends</option>
             <option value='genshin'>Genshin Impact</option>

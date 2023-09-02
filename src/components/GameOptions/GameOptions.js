@@ -33,7 +33,7 @@ export default function GameOptions ({ handleNextLevel, handleNewGame, isGameOve
   }
   return (
     <>
-      <SettingsModal ref={modalRef} closeModal={closeModal} isModalClosing={isModalClosing}/>
+      <SettingsModal ref={modalRef} closeModal={closeModal} isModalClosing={isModalClosing} isGameOver={isGameOver}  newGame={handleNewGame}/>
       <section className={`GameOptions ${theme}`}>
         <h2 className='visually-hidden'>Game Options</h2>
         <button onClick={openModal}>
