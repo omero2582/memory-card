@@ -180,7 +180,6 @@ function App() {
             cards={cardsThisLevel}
             handleCardClick={handleCardClick}
             isFlipped={isFlipped}
-            cardTheme={cardTheme}
           />
           <GameOptions handleNextLevel={nextLevel} isGameOver={isGameOver} handleNewGame={newGame}/>
           {showAdvanced && 

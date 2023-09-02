@@ -7,3 +7,12 @@
   /* grid-auto-flow: column; */
   justify-content: center;
 }
+
+.Board-Loading{
+  --card-height: 200px; 
+  /*NEW - lines below for loadng spinner*/
+  min-height: var(--card-height);
+  align-content: center;
+  display: grid;
+  align-content: center;
+}

@@ -5,6 +5,7 @@ import { mdiCardsSpade } from '@mdi/js';
 import { mdiCardsClub } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
+import { useSettingsContext } from "../../context/SettingsContext";
 
 const playingCardsMap = {
   spades: mdiCardsSpade,
@@ -14,11 +15,12 @@ const playingCardsMap = {
 
 }
 
-export default function Card ({isGameOver, isFlipped, character, onClick, cardTheme, showNames, showClickedCheat}) {
+export default function Card ({isGameOver, isFlipped, character, onClick}) {
   const {name, id, img} = character;
-  let newName = name;
-
+  const { cardTheme, showNames, showCardsClicked } = useSettingsContext();
+  const showClickedCheat = showCardsClicked && character.isClicked;
   
+  let newName = name;
 
   if (cardTheme === 'playingCards') {
     if (!name.includes('joker')){
