@@ -14,7 +14,6 @@ const playingCardsMap = {
   clubs: mdiCardsClub,
   hearts: mdiCardsHeart,
   diamonds: mdiCardsDiamond,
-
 }
 
 export default function Card ({ character}) {
@@ -30,17 +29,17 @@ export default function Card ({ character}) {
       const words = name.split(' ');
       const rank = words[0];
       const suit = words[words.length - 1];
-      console.log(playingCardsMap[suit]);
       console.log(suit);
-      newName = (<>
-      <span>{rank}</span><Icon title={suit} path={playingCardsMap[suit]} size={1} />
+      newName = (
+      <>
+        <span>{rank}</span><Icon title={suit} path={playingCardsMap[suit]} size={1} />
       </>)
     }
   }
   
   const width = 140;
   const height = 200;
-  const strokeWidth = 3;
+  const xStrokeWidth = 3;
 
   return (
     <div className={`card ${isFlipped ? 'flipped' : ''}` }>
@@ -61,8 +60,8 @@ export default function Card ({ character}) {
         {/* {character.isDoubleClicked && <div className="x"></div>} */}
         {character.isDoubleClicked &&
         <svg className="svgX" width={width} height={height} xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2={width} y2={height} stroke="black" stroke-width={strokeWidth} />
-          <line x1={width} y1="0" x2="0" y2={height} stroke="black" stroke-width={strokeWidth} />
+          <line x1="0" y1="0" x2={width} y2={height} stroke="black" strokeWidth={xStrokeWidth} />
+          <line x1={width} y1="0" x2="0" y2={height} stroke="black" strokeWidth={xStrokeWidth} />
         </svg>}
         <div className="card-back">
           <img src={getCardBackURL(cardBack)} alt={`${cardBack} card-back`} />

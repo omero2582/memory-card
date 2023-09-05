@@ -5,7 +5,7 @@ import { mdiCardsPlaying } from '@mdi/js';
 import { GameContext } from "../../context/GameContext";
 
 export default function Scoreboard () {
-
+  
   const {level, cardsThisLevel, score, highScore, cardsClicked} = useContext(GameContext);
   const numCards = cardsThisLevel.length;
   const numClicked = cardsClicked.length;

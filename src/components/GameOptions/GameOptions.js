@@ -8,7 +8,6 @@ import { useState, useRef } from 'react';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { mdiPlus } from '@mdi/js';
 import { GameContext } from '../../context/GameContext';
-import { useSettingsContext } from '../../context/SettingsContext';
 
 
 
@@ -17,7 +16,6 @@ export default function GameOptions () {
   const modalRef = useRef(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
   const { nextLevel, newGame, isGameOver } = useContext(GameContext);
-  const {handleShowAdvanced} = useSettingsContext()
   
   const openModal = () => {
     setIsModalClosing(false);
@@ -36,11 +34,6 @@ export default function GameOptions () {
     modalRef.current.close();
   }
 
-  const handleNewGame = () => {
-    newGame();
-    // handleShowAdvanced(false);
-  }
-
   return (
     <>
       <SettingsModal ref={modalRef} closeModal={closeModal} isModalClosing={isModalClosing}/>
@@ -57,7 +50,7 @@ export default function GameOptions () {
         </button>
         }
         { isGameOver &&
-        <button onClick={handleNewGame} className='new-game'>
+        <button onClick={newGame} className='new-game'>
         <Icon path={mdiPlus} size={1.2} />
           New Game
         </button>

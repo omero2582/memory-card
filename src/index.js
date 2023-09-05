@@ -9,7 +9,7 @@ import GameProvider from './context/GameContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <LogProvider>
       <ThemeProvider>
         <GameProvider>
@@ -19,6 +19,6 @@ root.render(
         </GameProvider>
       </ThemeProvider>
     </LogProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 

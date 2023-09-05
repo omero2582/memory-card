@@ -50,7 +50,7 @@ export const SettingsProvider = ({ children }) => {
 
   const handleShowCardsClicked = useCallback((value = true) => {
     setShowCardsClicked(value);
-  })
+  },[])
 
   return (
     <SettingsContext.Provider 

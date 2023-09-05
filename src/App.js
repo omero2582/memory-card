@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 
 function App() {
   const {theme} = useThemeContext();
-  const {showAdvanced, handleShowAdvanced, handleShowCardsClicked} = useSettingsContext();
+  const {showAdvanced} = useSettingsContext();
   const {isGameOver} = useContext(GameContext);
   
   return (

@@ -1,8 +1,6 @@
 import React from 'react'
 import { useState, useEffect, createContext, useContext } from 'react';
 import { LogContext } from './LogContext';
-import { ThemeContext } from './ThemeContext';
-import { useSettingsContext } from './SettingsContext';
 import useCards from '../useCards/useCards';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
@@ -26,18 +24,19 @@ export const GameContext = createContext(
 
 
 export default function GameProvider({children}) {
-  const [cardTheme, setCardTheme] = useState('playingCards');
   
+  console.log('Game CONTEXT');
+  const [cardTheme, setCardTheme] = useState('playingCards');
+  const [cardsThisLevel, setCardsThisLevel] = useState([]);
+  const cardsClicked = cardsThisLevel.filter(c => c.isClicked === true);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [level, setLevel] = useState(1);
-  const [cardsThisLevel, setCardsThisLevel] = useState([]);
-
-  const {logToTextArea} = useContext(LogContext);
 
   const [isFlipped, setIsFlipped] = useState(false);
-  const cardsClicked = cardsThisLevel.filter(c => c.isClicked === true);
   const [isGameOver, setIsGameOver] = useState(false);
+  
+  const {logToTextArea} = useContext(LogContext);
 
 
   const handleCardTheme = (e) => {
@@ -67,6 +66,7 @@ export default function GameProvider({children}) {
     setCardsThisLevel(c => shuffleArr(newCards || c));
     await new Promise((resolve) => setTimeout(resolve, 300));
     setIsFlipped(false);
+    // TODO TODO investigate this further... right now this is creating 3 renders, 1 for each setState before each setTimeout.. which also propagates downwards on whoever uses this contexts
   }
 
   // Load cards when cardTheme changes
@@ -75,6 +75,7 @@ export default function GameProvider({children}) {
   // Effects
   // everytime level or cardsList changes, set cardsThisLevel
   useEffect(() => {
+    console.log('EFFECT');
     const pickCards = () => {
       // Slice automatically uses array.length when you go over the limit
       const numCards = 2 + 2 * level;
@@ -103,7 +104,6 @@ export default function GameProvider({children}) {
     setScore(0);
     setLevel(1);
     setCardsList(c => shuffleArr(c));
-    // handleShowAdvanced(false) TODO move this to whoever uses handler
     setIsGameOver(false)
   }
 
@@ -117,8 +117,6 @@ export default function GameProvider({children}) {
         return c;
       }
     }))
-    // handleShowAdvanced(true); TODO same as above
-    // newGame();
   }
 
 
