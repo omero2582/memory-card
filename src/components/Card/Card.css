@@ -8,7 +8,7 @@
 .card {
   /* width: 140px; */
   position: relative;
-  min-height: 200px;
+  min-height: var(--card-height);
   perspective: 1000px;
 }
 
@@ -24,8 +24,8 @@
   transform: rotateY(180deg);
 }
 
-.card-front,
-.card-back {
+.card .card-front,
+.card .card-back {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -36,7 +36,7 @@
   align-items: center;
 }
 
-.card-back {
+.card .card-back {
   transform: rotateY(180deg);
 }
 
@@ -48,12 +48,38 @@
 .card-front {
   background-color: var(--card-background);
   border: 3px solid black;
+  transform: rotateY(0deg);
 }
+
+.card-front .card-name {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px; /*for space between playing card name and suit icon*/
+  margin-bottom: 6px;
+}
+
+.card-front.playingCards .card-name{
+  margin-bottom: 0px;
+}
+
+.card-front .card-img {
+  width: 100%;
+  max-width: 85%;
+  height: auto;
+  /**/
+}
+
+.card-front.playingCards .card-img {
+  background-color: white;
+}
+
+/*special*/
 
 .card-front:disabled {
   color: black;
   /*
-  fixes default behavior making text unreadable
+  fixes default behavior making text unreadable when card/button is disabled
   it looked ok when the card was flipping, but when GameOver is showing board with showNames,
   it looks bad
   */
@@ -79,40 +105,14 @@
   background-color: #7048E8;
 }
 
-.card-front {
-  transform: rotateY(0deg);
-}
 
 
-.card-front .card-name {
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.card-front .card-img {
-  width: 100%;
-  /* max-width: 90px; */
-  max-width: 85%;
-  height: auto;
-  /**/
-  margin-top: 6px;
-}
-
-.card-front .playingCards {
-  background-color: white;
-  margin-top: 0px;
-}
 
 /*yolo*/
-.x {
-  position: absolute;
+/* .x {
+  position: relative;
   width: 100%;
   height: 100%;
-  /* transform: rotate(55deg); */
-  left: 12px;
-  bottom: 19px;
 }
 
 .x::before,
@@ -125,11 +125,29 @@
 }
 
 .x::before {
-  left: 40%;
-  transform: rotate(-35deg);
+  left: 49%;
+  bottom: -19px;
+  transform: rotate(-34.8deg);
 }
 
 .x::after {
-  transform: rotate(35deg);
-  right: 58%;
+  left: 49%;
+  bottom: -19px;
+  transform: rotate(34.8deg);
+} 
+Read below, I replaced this with an svg in Card.js JSX
+*/
+
+/*
+TODO TODO.. try instead of this css, to draw the X using SVG
+I rememebr they had some simplelogic to draw lines from point a to point b.
+this can maybe help, because the problm rn is taht If i change cardd sizes,
+I will have to manually adjust the X
+*/
+
+.svgX {
+  position: absolute;
+  left: 0;
+  pointer-events: none;   /*allows :hover from elements under it, for example, to show title tooltip*/
+  /*https://stackoverflow.com/questions/9738984/css-hover-passes-through-elements-to-activate-hover-on-covered-element*/
 }

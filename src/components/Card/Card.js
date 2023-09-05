@@ -17,7 +17,7 @@ const playingCardsMap = {
 
 export default function Card ({isGameOver, isFlipped, character, onClick}) {
   const {name, id, img} = character;
-  const { cardTheme, showNames, showCardsClicked } = useSettingsContext();
+  const { cardTheme, showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
   const showClickedCheat = showCardsClicked && character.isClicked;
   
   let newName = name;
@@ -44,20 +44,34 @@ export default function Card ({isGameOver, isFlipped, character, onClick}) {
     onClick(character);
     // need to add this somewhere^^
   };
+  const width = 140;
+  const height = 200;
+  const strokeWidth = 3;
+
   return (
     <div className={`card ${isFlipped ? 'flipped' : ''}` }>
       <div className="card-inner">
         <button 
           title={name} 
           disabled={isFlipped || isGameOver} 
-          className={`card-front ${showClickedCheat ? 'showClickedCheat' : '' } ${isGameOver ? 'game-over' : ''} ${character.isDoubleClicked ? 'double-clicked' : ''}`}
+          className={
+            `card-front
+            ${showClickedCheat ? 'showClickedCheat' : '' }
+            ${isGameOver ? 'game-over' : ''}
+            ${character.isDoubleClicked ? 'double-clicked' : ''}
+            ${cardTheme}`}
           onClick={handleClick}>
           {showNames && <h3 className="card-name">{newName}</h3>}
-          <img className={`card-img ${cardTheme}`} alt={name} src={img}/>
+          <img className={`card-img`} alt={name} src={img}/>
         </button>
-        {character.isDoubleClicked && <div className="x"></div>}
+        {/* {character.isDoubleClicked && <div className="x"></div>} */}
+        {character.isDoubleClicked &&
+        <svg className="svgX" width={width} height={height} xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0" x2={width} y2={height} stroke="black" stroke-width={strokeWidth} />
+          <line x1={width} y1="0" x2="0" y2={height} stroke="black" stroke-width={strokeWidth} />
+        </svg>}
         <div className="card-back">
-          <img src={process.env.PUBLIC_URL + '/CardBacks/yugioh.png'} alt="Back of the card" />
+          <img src={getCardBackURL(cardBack)} alt={`${cardBack} card-back`} />
         </div>
       </div>
     </div>

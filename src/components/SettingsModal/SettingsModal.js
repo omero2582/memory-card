@@ -9,7 +9,8 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   const {
     cardTheme, handleCardTheme,
     showNames, handleShowNames,
-    showAdvanced, toggleShowAdvanced} = useSettingsContext();
+    showAdvanced, toggleShowAdvanced,
+    cardBack, handleCardBack, cardBackMap, getCardBackURL} = useSettingsContext();
     
   const {isModalClosing, closeModal, isGameOver, newGame} = props;
   
@@ -28,7 +29,24 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
     }
   }
 
+  // const objectValues = Object.values(myObject);
 
+  const renderCardBacks = () => {
+  //  return Object.values(cardBackMap).map(cb => 
+  //     <button key={cb} onClick={() => handleCardBack(cb)} className={`card-back ${cb === cardBack ? 'active' : ''}`} >
+  //       <img alt={cb}  src={process.env.PUBLIC_URL + `/CardBacks/${cb}`}/>
+  //     </button>)
+    let cardBackOptions = [];
+    for (let cb in cardBackMap){
+      console.log(cardBackMap[cb]);
+      cardBackOptions.push(
+        <button key={cb} onClick={() => handleCardBack(cb)} className={`card-back ${cb === cardBack ? 'active' : ''}`} >
+          <img  alt={cb}  src={getCardBackURL(cb)}/>
+        </button>
+      )
+    }
+    return cardBackOptions
+  }
 
   return (
     <dialog ref={ref} className={`SettingsModal ${isModalClosing ? 'closing' : '' }`} onClick={closeModal}>
@@ -70,6 +88,12 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
         <section>
         <label htmlFor="show-advanced">Show Advanced</label>
           <input id="show-advanced" type="checkbox" checked={showAdvanced} onChange={toggleShowAdvanced}></input>
+        </section>
+        <section>
+          <label>Card Back:</label>
+          <div className='card-backs'>
+            {renderCardBacks()}
+          </div>
         </section>
         <button className='close' onClick={closeModal}>Close</button>
       </section>

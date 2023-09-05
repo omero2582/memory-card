@@ -1,15 +1,13 @@
 .Board {
+  --card-height: 200px; 
+  --card-width: 140px; 
   display: grid;
-  /* grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
-  /* gap: 5px; */
-  grid-template-columns: repeat(auto-fit, 140px);
+  grid-template-columns: repeat(auto-fit, var(--card-width));
   gap: 10px;
-  /* grid-auto-flow: column; */
   justify-content: center;
 }
 
 .Board-Loading{
-  --card-height: 200px; 
   /*NEW - lines below for loadng spinner*/
   min-height: var(--card-height);
   align-content: center;
