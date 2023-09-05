@@ -1,9 +1,12 @@
 import { useEffect, useRef } from "react";
 import './Advanced.css'
 import { useLogContext } from "../../context/LogContext";
-export default function Advanced({cardsClicked}) {
+import { useContext } from "react";
+import { GameContext } from "../../context/GameContext";
+export default function Advanced() {
   const { logs } = useLogContext();
   const textareaRef = useRef();
+  const {cardsClicked} = useContext(GameContext);
   
   useEffect(() => {
     if(textareaRef.current){

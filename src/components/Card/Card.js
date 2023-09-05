@@ -6,6 +6,8 @@ import { mdiCardsClub } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
 import { useSettingsContext } from "../../context/SettingsContext";
+import { useContext } from "react";
+import { GameContext } from "../../context/GameContext";
 
 const playingCardsMap = {
   spades: mdiCardsSpade,
@@ -15,10 +17,11 @@ const playingCardsMap = {
 
 }
 
-export default function Card ({isGameOver, isFlipped, character, onClick}) {
+export default function Card ({ character}) {
   const {name, id, img} = character;
-  const { cardTheme, showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
-  const showClickedCheat = showCardsClicked && character.isClicked;
+  const { showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
+  const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
+  const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   
   let newName = name;
 
@@ -35,15 +38,6 @@ export default function Card ({isGameOver, isFlipped, character, onClick}) {
     }
   }
   
-  const handleClick = () => {
-    // setIsFlipped(true);
-    // console.log('CLICK');
-    // setTimeout(() => {
-    //   setIsFlipped(false)
-    // },1250)
-    onClick(character);
-    // need to add this somewhere^^
-  };
   const width = 140;
   const height = 200;
   const strokeWidth = 3;
@@ -60,7 +54,7 @@ export default function Card ({isGameOver, isFlipped, character, onClick}) {
             ${isGameOver ? 'game-over' : ''}
             ${character.isDoubleClicked ? 'double-clicked' : ''}
             ${cardTheme}`}
-          onClick={handleClick}>
+          onClick={() => handleCardClick(character)}>
           {showNames && <h3 className="card-name">{newName}</h3>}
           <img className={`card-img`} alt={name} src={img}/>
         </button>

@@ -1,12 +1,14 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import Card from "../Card/Card";
 import { useSettingsContext } from "../../context/SettingsContext";
 import './Board.css'
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useThemeContext } from "../../context/ThemeContext";
+import { GameContext } from "../../context/GameContext";
 
-export default function Board ({ isGameOver, isFlipped, error, isLoading, cards, handleCardClick}) {
+export default function Board () {
   // const {showCardsClicked} = useSettingsContext();
+  const { error, isLoading, cardsThisLevel: cards} = useContext(GameContext);
   const {theme} = useThemeContext();
   let spinnerColors;
   if (theme === 'dark'){
@@ -28,11 +30,8 @@ export default function Board ({ isGameOver, isFlipped, error, isLoading, cards,
       <h2 className="visually-hidden">Gameboard</h2>
       {cards.map(character =>
         <Card 
-          isGameOver={isGameOver}
-          isFlipped={isFlipped}
           key={character.id}
           character={character}
-          onClick={handleCardClick}
           // showClickedCheat={showCardsClicked && character.isClicked}
         />)}
     </section>

@@ -1,4 +1,5 @@
 import React, {useState, createContext, useContext} from 'react'
+import { useCallback } from 'react';
 
 const cardBackMap = {
   CLASSIC: 'bicycle-red.jpg',
@@ -22,16 +23,11 @@ const getCardBackURL = (cardback) => {
 const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
-  const [cardTheme, setCardTheme] = useState('playingCards');
+  
   const [showNames, setShowNames] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showCardsClicked, setShowCardsClicked] = useState(false);
   const [cardBack, setCardBack] = useState(loadCardBack());
-
-
-  const handleCardTheme = (e) => {
-    setCardTheme(e.target.value);
-  }
 
   const handleShowNames = (e) => {
     setShowNames(e.target.checked);
@@ -42,23 +38,26 @@ export const SettingsProvider = ({ children }) => {
     setShowCardsClicked(s => !s);
   }
 
-  const handleShowAdvanced = (value=true) => {
+  const handleShowAdvanced = useCallback((value=true) => {
     setShowAdvanced(value);
     setShowCardsClicked(value);
-  }
+  }, [])
 
   const handleCardBack = (cardBack) => {
     setCardBack(cardBack);
     localStorage.setItem('cardBack', cardBack)
   }
 
+  const handleShowCardsClicked = useCallback((value = true) => {
+    setShowCardsClicked(value);
+  })
+
   return (
     <SettingsContext.Provider 
       value={{
-        cardTheme, handleCardTheme,
         showNames, handleShowNames,
         showAdvanced, toggleShowAdvanced, handleShowAdvanced,
-        showCardsClicked,
+        showCardsClicked, handleShowCardsClicked,
         cardBack, cardBackMap, handleCardBack, getCardBackURL
       }}>
         {children}

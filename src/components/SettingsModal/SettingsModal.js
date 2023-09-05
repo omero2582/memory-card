@@ -3,16 +3,19 @@ import './SettingsModal.css'
 import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
 import { useSettingsContext } from '../../context/SettingsContext';
+import { GameContext } from '../../context/GameContext';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   const {theme, toggleTheme} = useContext(ThemeContext);
   const {
-    cardTheme, handleCardTheme,
+    
     showNames, handleShowNames,
     showAdvanced, toggleShowAdvanced,
     cardBack, handleCardBack, cardBackMap, getCardBackURL} = useSettingsContext();
+  const {cardTheme, handleCardTheme, newGame,isGameOver} = useContext(GameContext); 
     
-  const {isModalClosing, closeModal, isGameOver, newGame} = props;
+  const {isModalClosing, closeModal,
+    } = props;
   
   // TODO TODO. read comment below in JSX. I added this handler below as a quick band-aid fix.
   // Right now, I am prop drilling isGameOver and newGame()
@@ -22,12 +25,12 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   // Can maybe also just bootleg move the SettingsProvider INSIDE of App.js instead of outside, then pass it isGameOver
   // and newGame(). That would solve this problem, and maybe other places where they were prop drilled??
   // not sure. Really have to look and think about whether its better to have global context access to the game vars and handlers
-  const onChange = (e) => {
-    handleCardTheme(e);
-    if(isGameOver){
-      newGame();
-    }
-  }
+  // const onChange = (e) => {
+  //   handleCardTheme(e);
+  //   if(isGameOver){
+  //     newGame();
+  //   }
+  // }
 
   // const objectValues = Object.values(myObject);
 
@@ -55,8 +58,8 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
           <label htmlFor="game-theme" className="game-theme-title">Card Theme:</label>
           <select 
             id="game-theme" 
-            value={cardTheme || 'league'}  // sets league as default, without changing the url
-            onChange={onChange}  //was handleCardTheme
+            value={cardTheme}
+            onChange={handleCardTheme}  //was handleCardTheme
             // TODO add if(GameOver) => newGame. I can put it on the effect itself inside App.js but that feels wrong & missuse of useEffect
             // yea... and the handler is in themeContext.. this makes me think that ther should be a GameContext wrapped around Settings,
             // AT LEAST containing 'isGameOver' and 'newGame()'. but bc of the vriables these handle, prob ALL the gamestate would go on this context,

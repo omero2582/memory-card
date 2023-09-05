@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import './Scoreboard.css'
 import Icon from '@mdi/react';
 import { mdiCardsPlaying } from '@mdi/js';
+import { GameContext } from "../../context/GameContext";
 
-export default function Scoreboard ({level, score, highScore, numCards, numClicked}) {
+export default function Scoreboard () {
 
-
+  const {level, cardsThisLevel, score, highScore, cardsClicked} = useContext(GameContext);
+  const numCards = cardsThisLevel.length;
+  const numClicked = cardsClicked.length;
+  
   return (
     <section className="Scoreboard">
       <h2 className="visually-hidden">Scoreboard</h2>
