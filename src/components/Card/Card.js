@@ -6,7 +6,7 @@ import { mdiCardsClub } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
 import { useSettingsContext } from "../../context/SettingsContext";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { GameContext } from "../../context/GameContext";
 
 const playingCardsMap = {
@@ -16,26 +16,32 @@ const playingCardsMap = {
   diamonds: mdiCardsDiamond,
 }
 
-export default function Card ({ character}) {
-  const {name, id, img} = character;
-  const { showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
-  const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
-  const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
-  
-  let newName = name;
-
+const getShortName = (name, cardTheme) => {
+  let shortName = name;
   if (cardTheme === 'playingCards') {
     if (!name.includes('joker')){
       const words = name.split(' ');
       const rank = words[0];
       const suit = words[words.length - 1];
       console.log(suit);
-      newName = (
+      shortName = (
       <>
         <span>{rank}</span><Icon title={suit} path={playingCardsMap[suit]} size={1} />
       </>)
     }
   }
+  return shortName;
+}
+
+export default function Card ({ character}) {
+  const {name, id, img} = character;
+  const { showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
+  const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
+  const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
+  
+  let newName = useMemo(() => getShortName(name, cardTheme), [cardTheme, name]);
+  // let newName = getShortName(name, cardTheme); 
+  // use  the useMemo version, but for now I just want to see. Card rns twice on startup, and 3 times on cardClick.
   
   const width = 140;
   const height = 200;
