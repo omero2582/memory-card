@@ -1,5 +1,5 @@
 import React, { useContext, forwardRef, useMemo } from 'react'
-import './SettingsModal.css'
+import './SettingsModal.scss'
 import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
 import { useSettingsContext } from '../../context/SettingsContext';

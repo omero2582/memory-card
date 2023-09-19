@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import './Card.css'
+import './Card.scss'
 import Icon from '@mdi/react';
 import { mdiCardsSpade } from '@mdi/js';
 import { mdiCardsClub } from '@mdi/js';

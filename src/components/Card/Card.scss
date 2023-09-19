@@ -1,0 +1,152 @@
+:root {
+  --card-clicked:lime;
+  --card-background: rgb(250, 235, 215);
+  --card-hover: rgb(0, 255, 255);
+}
+
+/**/
+.card {
+  /* width: 140px; */
+  position: relative;
+  min-height: var(--card-height);
+  perspective: 1000px;
+
+  &.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    transform-origin: center;
+
+    .card-front, .card-back {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      
+    }
+
+    .card-front{
+      background-color: var(--card-background);
+      border: 3px solid black;
+      transform: rotateY(0deg);
+      &.playingCards {
+        .card-name{
+          margin-bottom: 0px;
+        }
+        .card-img {
+          background-color: white;
+        }
+      }
+      .card-name {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px; /*for space between playing card name and suit icon*/
+        margin-bottom: 6px;
+      }
+
+      .card-img {
+        width: 100%;
+        max-width: 85%;
+        height: auto;
+        /**/
+      }
+      
+      /*special*/
+
+      &:disabled {
+        color: black;
+        /*
+        fixes default behavior making text unreadable when card/button is disabled
+        it looked ok when the card was flipping, but when GameOver is showing board with showNames,
+        it looks bad
+        */
+      }
+
+      &:hover:not(.clicked):not(.game-over){
+        background-color: var(--card-hover);
+        /* box-shadow: 0 0 6px 6px yellow; */
+        box-shadow: 0 0 6px 2px yellow;
+        border: 2px solid yellow;
+      }
+
+      &.game-over:hover{
+        cursor: default;
+      }
+
+      &.showClickedCheat:not(.double-clicked) {
+        background-color:salmon;
+      }
+
+
+      &.double-clicked{
+        background-color: #7048E8;
+      }
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+      
+    }
+  }
+}
+
+
+/*yolo*/
+/* .x {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.x::before,
+.x::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 119%;
+  background-color: black;
+}
+
+.x::before {
+  left: 49%;
+  bottom: -19px;
+  transform: rotate(-34.8deg);
+}
+
+.x::after {
+  left: 49%;
+  bottom: -19px;
+  transform: rotate(34.8deg);
+} 
+Read below, I replaced this with an svg in Card.js JSX
+*/
+
+/*
+TODO TODO.. try instead of this css, to draw the X using SVG
+I rememebr they had some simplelogic to draw lines from point a to point b.
+this can maybe help, because the problm rn is taht If i change cardd sizes,
+I will have to manually adjust the X
+*/
+
+.svgX {
+  position: absolute;
+  left: 0;
+  pointer-events: none;   /*allows :hover from elements under it, for example, to show title tooltip*/
+  /*https://stackoverflow.com/questions/9738984/css-hover-passes-through-elements-to-activate-hover-on-covered-element*/
+}

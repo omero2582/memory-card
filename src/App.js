@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import Scoreboard from './components/Scoreboard/Scoreboard';
 import Board from './components/Board/Board';
 import GameOptions from './components/GameOptions/GameOptions';

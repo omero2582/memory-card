@@ -14,6 +14,15 @@ code {
     monospace;
 }
 
+:root *{
+  margin: 0px;
+  padding: 0px; 
+}
+
+button:hover {
+  cursor: pointer;
+}
+
 .visually-hidden {
   position: absolute !important;
   left: -9999px !important;
@@ -22,4 +31,3 @@ code {
   height: 1px !important;
   overflow: hidden !important;
 }
-

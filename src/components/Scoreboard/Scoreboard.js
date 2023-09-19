@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import './Scoreboard.css'
+import './Scoreboard.scss'
 import Icon from '@mdi/react';
 import { mdiCardsPlaying } from '@mdi/js';
 import { GameContext } from "../../context/GameContext";

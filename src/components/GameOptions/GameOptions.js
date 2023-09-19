@@ -1,4 +1,4 @@
-import './GameOptions.css'
+import './GameOptions.scss'
 import Icon from '@mdi/react';
 import { mdiCog } from '@mdi/js';
 import { ThemeContext } from '../../context/ThemeContext';

@@ -1,0 +1,49 @@
+.GameOptions {
+  margin-top: 14px;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 10px;
+
+  &.dark{
+    button{
+      background-color:rgb(26, 27, 30);
+      color: white;
+      &:hover {
+        background-color: hsl(225, 7%, 20%);
+      }
+    }
+  }
+
+  button {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 1.2rem;
+    padding: 6px;
+    padding: 6px 10px;
+    /**/
+    border-radius: 4px;
+    border: 1px solid black;
+    border: none;
+    background-color:hsl(203, 100%, 80%);
+    /* background-color:hsl(209, 77%, 43%);
+    color: white; */
+    /* background-color:rgb(26, 27, 30);
+    color: white; */
+
+    &:hover {
+      background-color:hsl(203, 100%, 72%);
+    }
+
+    &.new-game {
+      background-color: hsl(209, 77%, 43%);
+      color: white;
+
+      &:hover {
+        background-color: hsl(209, 75%, 38%);
+      }
+    }
+  }
+}

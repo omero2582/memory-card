@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import './Advanced.css'
+import './Advanced.scss'
 import { useLogContext } from "../../context/LogContext";
 import { useContext } from "react";
 import { GameContext } from "../../context/GameContext";

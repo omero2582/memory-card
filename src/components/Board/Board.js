@@ -1,7 +1,7 @@
 import React, {useState, useContext} from "react";
 import Card from "../Card/Card";
 import { useSettingsContext } from "../../context/SettingsContext";
-import './Board.css'
+import './Board.scss'
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useThemeContext } from "../../context/ThemeContext";
 import { GameContext } from "../../context/GameContext";
