@@ -2,23 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
-import { SettingsProvider } from './context/SettingsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LogProvider } from './context/LogContext';
 import GameProvider from './context/GameContext';
 
+import { store } from './store/store.js'
+import { Provider as ReduxProvider } from 'react-redux'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <LogProvider>
+  <ReduxProvider store={store}> 
       <ThemeProvider>
         <GameProvider>
-          <SettingsProvider>
-            <App />
-          </SettingsProvider>
+          <App />
         </GameProvider>
       </ThemeProvider>
-    </LogProvider>
+  </ReduxProvider>
   // </React.StrictMode>
 );
 

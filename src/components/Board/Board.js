@@ -1,13 +1,11 @@
 import React, {useState, useContext} from "react";
 import Card from "../Card/Card";
-import { useSettingsContext } from "../../context/SettingsContext";
 import './Board.scss'
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useThemeContext } from "../../context/ThemeContext";
 import { GameContext } from "../../context/GameContext";
 
 export default function Board () {
-  // const {showCardsClicked} = useSettingsContext();
   const { error, isLoading, cardsThisLevel: cards} = useContext(GameContext);
   const {theme} = useThemeContext();
   let spinnerColors;

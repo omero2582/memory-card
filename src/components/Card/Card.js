@@ -5,9 +5,10 @@ import { mdiCardsSpade } from '@mdi/js';
 import { mdiCardsClub } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
-import { useSettingsContext } from "../../context/SettingsContext";
 import { useContext, useMemo } from "react";
 import { GameContext } from "../../context/GameContext";
+import { useSelector } from "react-redux";
+import { getCardBackURL } from "../../store/slices/settingsSlice";
 
 const playingCardsMap = {
   spades: mdiCardsSpade,
@@ -35,7 +36,7 @@ const getShortName = (name, cardTheme) => {
 
 export default function Card ({ character}) {
   const {name, id, img} = character;
-  const { showNames, showCardsClicked, cardBack, getCardBackURL } = useSettingsContext();
+  const { showNames, showCardsClicked, cardBack } = useSelector((state) => state.settings);
   const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
   const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   

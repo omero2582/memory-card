@@ -6,13 +6,12 @@ import Advanced from './components/Advanced/Advanced';
 import { useContext } from 'react';
 import { GameContext } from './context/GameContext';
 import { useThemeContext } from './context/ThemeContext';
-import { useSettingsContext } from './context/SettingsContext';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 
 function App() {
   const {theme} = useThemeContext();
-  const {showAdvanced} = useSettingsContext();
+  const {showAdvanced} = useSelector((state) => state.settings);
   const {isGameOver} = useContext(GameContext);
   
   return (

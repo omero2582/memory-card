@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import './Advanced.scss'
-import { useLogContext } from "../../context/LogContext";
 import { useContext } from "react";
 import { GameContext } from "../../context/GameContext";
+import { useSelector } from "react-redux";
 export default function Advanced() {
-  const { logs } = useLogContext();
+  const { logs } = useSelector((state) => state.logs);
   const textareaRef = useRef();
   const {cardsClicked} = useContext(GameContext);
   

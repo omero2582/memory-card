@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState, useEffect, createContext, useContext } from 'react';
-import { LogContext } from './LogContext';
+// import { LogContext } from './LogContext';
 import useCards from '../useCards/useCards';
+import { useDispatch, useSelector } from 'react-redux';
+import { logToTextArea } from '../store/slices/logsSlice';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 // TODO TODO in case i need these symbols ♠️♥️♦️♣️
@@ -36,12 +38,12 @@ export default function GameProvider({children}) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   
-  const {logToTextArea} = useContext(LogContext);
-
+  // const {logToTextArea} = useContext(LogContext);
+  const dispatch = useDispatch();
 
   const handleCardTheme = (e) => {
     setCardTheme(e.target.value);
-    logToTextArea(`Card theme set: ${e.target.value}`);
+    dispatch(logToTextArea(`Card theme set: ${e.target.value}`));
     setScore(0);
     if(isGameOver){
       newGame();
@@ -93,7 +95,7 @@ export default function GameProvider({children}) {
 
   // Handlers
   const nextLevel = () => {
-    logToTextArea(`Level ${level + 1}`);
+    dispatch(logToTextArea(`Level ${level + 1}`));
     setScore(0);
     setLevel(l => l + 1);
     // resetCardsClicked(); // dont need this bc pickCards useEffect() when level or cardTheme changes
@@ -108,7 +110,7 @@ export default function GameProvider({children}) {
   }
 
   const gameOver = (character) => {
-    logToTextArea(`Game Over, Already Clicked ${character.name}`);
+    dispatch(logToTextArea(`Game Over, Already Clicked ${character.name}`));
     setIsGameOver(true);
     setCardsThisLevel(cards => cards.map(c => {
       if(c.id === character.id){
@@ -125,7 +127,7 @@ export default function GameProvider({children}) {
       gameOver(card);
     }else {
       // sucessful selection
-      logToTextArea(`${card.name} selected`);
+      dispatch(logToTextArea(`${card.name} selected`));
       setScore(s => s + 1);
       if (score + 1 > highScore){
         setHighScore(score + 1);

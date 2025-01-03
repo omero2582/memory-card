@@ -2,19 +2,21 @@ import React, { useContext, forwardRef, useMemo } from 'react'
 import './SettingsModal.scss'
 import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
-import { useSettingsContext } from '../../context/SettingsContext';
 import { GameContext } from '../../context/GameContext';
 import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleShowNames, toggleShowAdvanced, handleCardBack, cardBackMap, getCardBackURL } from '../../store/slices/settingsSlice';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
+
+  //
+  const dispatch = useDispatch();
+  const {showNames, showAdvanced, cardBack} = useSelector((state) => state.settings);
+  //
+
   const {isModalClosing, closeModal} = props;
   const {theme, toggleTheme} = useContext(ThemeContext);
   const {cardTheme, handleCardTheme} = useContext(GameContext); 
-  const { 
-    showNames, handleShowNames,
-    showAdvanced, toggleShowAdvanced,
-    cardBack, handleCardBack, cardBackMap, getCardBackURL} = useSettingsContext();
-    
 
   // const objectValues = Object.values(myObject);
   const renderCardBacks = useCallback(() => {
@@ -22,7 +24,7 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
     for (let cb in cardBackMap){
       console.log(cardBackMap[cb]);
       cardBackOptions.push(
-        <button key={cb} onClick={() => handleCardBack(cb)} className={`card-back ${cb === cardBack ? 'active' : ''}`} >
+        <button key={cb} onClick={() => dispatch(handleCardBack(cb))} className={`card-back ${cb === cardBack ? 'active' : ''}`} >
           <img  alt={cb}  src={getCardBackURL(cb)}/>
         </button>
       )
@@ -62,11 +64,11 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
         </section>
         <section className="show-names">
           <label htmlFor="show-names">Show Names</label>
-          <input id="show-names" type="checkbox" checked={showNames} onChange={handleShowNames}></input>
+          <input id="show-names" type="checkbox" checked={showNames} onChange={(e) => dispatch(handleShowNames(e.target.checked))}></input>
         </section>
         <section>
         <label htmlFor="show-advanced">Show Advanced</label>
-          <input id="show-advanced" type="checkbox" checked={showAdvanced} onChange={toggleShowAdvanced}></input>
+          <input id="show-advanced" type="checkbox" checked={showAdvanced} onChange={() => dispatch(toggleShowAdvanced())}></input>
         </section>
         <section>
           <label>Card Back:</label>
