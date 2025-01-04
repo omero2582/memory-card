@@ -3,10 +3,14 @@ import './Advanced.scss'
 import { useContext } from "react";
 import { GameContext } from "../../context/GameContext";
 import { useSelector } from "react-redux";
+import { cardsClickedSelect } from "../../store/slices/gameSlice";
+
 export default function Advanced() {
   const { logs } = useSelector((state) => state.logs);
   const textareaRef = useRef();
-  const {cardsClicked} = useContext(GameContext);
+  // const {cardsClicked} = useContext(GameContext);
+  // const {cardsClicked} = useSelector((state) => state.game);
+  const cardsClicked = useSelector(cardsClickedSelect)
   
   useEffect(() => {
     if(textareaRef.current){

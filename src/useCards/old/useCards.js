@@ -2,12 +2,10 @@ import {useState, useEffect} from 'react'
 import genshin from './fetch/genshin';
 import league from './fetch/league';
 import playingCards from './fetch/playingCards';
-import { useDispatch } from 'react-redux';
-import { setCardsList } from '../store/slices/gameSlice';
 
 const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 export default function useCards(cardTheme) {
-  const dispatch = useDispatch();
+  const [cardsList, setCardsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,8 +33,7 @@ export default function useCards(cardTheme) {
       const characters = await getGameCards();
       // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
       const shuffled = shuffleArr(characters);
-      // setCardsList(shuffled);
-      dispatch(setCardsList(shuffled));
+      setCardsList(shuffled);
       // logToTextArea(`Card theme set: ${cardTheme}`);
       // setScore(0);
       await preloadImages(shuffled.map(c => c.img));
@@ -48,7 +45,7 @@ export default function useCards(cardTheme) {
     
   }, [cardTheme]);
 
-  return {isLoading, error}
+  return {isLoading, error, cardsList, setCardsList}
 }
 
 function preloadImages(imageUrls) {

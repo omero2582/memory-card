@@ -12,7 +12,9 @@ import { useSelector } from 'react-redux';
 function App() {
   const {theme} = useThemeContext();
   const {showAdvanced} = useSelector((state) => state.settings);
-  const {isGameOver} = useContext(GameContext);
+  // const {isGameOver} = useContext(GameContext);
+  const {isGameOver} = useSelector((state) => state.game);
+
   
   return (
       <div className={`container ${theme}`}>

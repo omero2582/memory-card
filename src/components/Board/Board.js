@@ -4,9 +4,11 @@ import './Board.scss'
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useThemeContext } from "../../context/ThemeContext";
 import { GameContext } from "../../context/GameContext";
+import { useSelector } from "react-redux";
 
 export default function Board () {
-  const { error, isLoading, cardsThisLevel: cards} = useContext(GameContext);
+  const { error, isLoading } = useContext(GameContext);
+  const {cardsThisLevel: cards} = useSelector((state) => state.game);
   const {theme} = useThemeContext();
   let spinnerColors;
   if (theme === 'dark'){

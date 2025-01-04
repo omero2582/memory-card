@@ -6,17 +6,17 @@ import { GameContext } from '../../context/GameContext';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleShowNames, toggleShowAdvanced, handleCardBack, cardBackMap, getCardBackURL } from '../../store/slices/settingsSlice';
+import { handleCardThemeGame } from '../../store/slices/gameSlice';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
 
   //
   const dispatch = useDispatch();
-  const {showNames, showAdvanced, cardBack} = useSelector((state) => state.settings);
+  const {showNames, showAdvanced, cardBack, cardTheme} = useSelector((state) => state.settings);
   //
 
   const {isModalClosing, closeModal} = props;
   const {theme, toggleTheme} = useContext(ThemeContext);
-  const {cardTheme, handleCardTheme} = useContext(GameContext); 
 
   // const objectValues = Object.values(myObject);
   const renderCardBacks = useCallback(() => {
@@ -42,7 +42,7 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
           <select 
             id="game-theme" 
             value={cardTheme}
-            onChange={handleCardTheme}> 
+            onChange={(e) => dispatch(handleCardThemeGame(e.target.value))}> 
             <option value='playingCards'>Playing Cards</option>
             <option value='league'>League of Legends</option>
             <option value='genshin'>Genshin Impact</option>

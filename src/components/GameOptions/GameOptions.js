@@ -8,6 +8,8 @@ import { useState, useRef } from 'react';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { mdiPlus } from '@mdi/js';
 import { GameContext } from '../../context/GameContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { newGame, nextLevel } from '../../store/slices/gameSlice';
 
 
 
@@ -15,7 +17,8 @@ export default function GameOptions () {
   const {theme} = useContext(ThemeContext);
   const modalRef = useRef(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
-  const { nextLevel, newGame, isGameOver } = useContext(GameContext);
+  // const { nextLevel, newGame, isGameOver } = useContext(GameContext);
+  const { isGameOver } = useSelector((state) => state.game);
   
   const openModal = () => {
     setIsModalClosing(false);
@@ -34,6 +37,8 @@ export default function GameOptions () {
     modalRef.current.close();
   }
 
+  const dispatch = useDispatch();
+
   return (
     <>
       <SettingsModal ref={modalRef} closeModal={closeModal} isModalClosing={isModalClosing}/>
@@ -44,13 +49,13 @@ export default function GameOptions () {
           Settings
         </button>
         { !isGameOver &&
-        <button onClick={nextLevel}>
+        <button onClick={() => dispatch(nextLevel())}>
           <Icon path={mdiSkipNext} size={1.2} />
           Next Level
         </button>
         }
         { isGameOver &&
-        <button onClick={newGame} className='new-game'>
+        <button onClick={() => dispatch(newGame())} className='new-game'>
         <Icon path={mdiPlus} size={1.2} />
           New Game
         </button>

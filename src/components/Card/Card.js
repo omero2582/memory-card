@@ -7,8 +7,9 @@ import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
 import { useContext, useMemo } from "react";
 import { GameContext } from "../../context/GameContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCardBackURL } from "../../store/slices/settingsSlice";
+import { handleCardClick } from "../../store/slices/gameSlice";
 
 const playingCardsMap = {
   spades: mdiCardsSpade,
@@ -35,9 +36,11 @@ const getShortName = (name, cardTheme) => {
 }
 
 export default function Card ({ character}) {
+  const dispatch = useDispatch();
   const {name, id, img} = character;
   const { showNames, showCardsClicked, cardBack } = useSelector((state) => state.settings);
-  const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
+  // const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
+  const {cardTheme, isGameOver, isFlipped} = useSelector((state) => state.game);
   const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   
   let newName = useMemo(() => getShortName(name, cardTheme), [cardTheme, name]);
@@ -60,7 +63,7 @@ export default function Card ({ character}) {
             ${isGameOver ? 'game-over' : ''}
             ${character.isDoubleClicked ? 'double-clicked' : ''}
             ${cardTheme}`}
-          onClick={() => handleCardClick(character)}>
+          onClick={() => dispatch(handleCardClick(character))}>
           {showNames && <h3 className="card-name">{newName}</h3>}
           <img className={`card-img`} alt={name} src={img}/>
         </button>
