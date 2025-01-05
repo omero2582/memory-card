@@ -2,11 +2,10 @@ import React, { useContext, forwardRef, useMemo } from 'react'
 import './SettingsModal.scss'
 import Switch from "react-switch";
 import { ThemeContext } from '../../context/ThemeContext';
-import { GameContext } from '../../context/GameContext';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleShowNames, toggleShowAdvanced, handleCardBack, cardBackMap, getCardBackURL } from '../../store/slices/settingsSlice';
-import { handleCardThemeGame } from '../../store/slices/gameSlice';
+import { handleCardTheme } from '../../store/slices/gameSlice';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
 
@@ -42,7 +41,7 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
           <select 
             id="game-theme" 
             value={cardTheme}
-            onChange={(e) => dispatch(handleCardThemeGame(e.target.value))}> 
+            onChange={(e) => dispatch(handleCardTheme(e.target.value))}> 
             <option value='playingCards'>Playing Cards</option>
             <option value='league'>League of Legends</option>
             <option value='genshin'>Genshin Impact</option>

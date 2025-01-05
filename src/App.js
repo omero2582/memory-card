@@ -3,8 +3,6 @@ import Scoreboard from './components/Scoreboard/Scoreboard';
 import Board from './components/Board/Board';
 import GameOptions from './components/GameOptions/GameOptions';
 import Advanced from './components/Advanced/Advanced';
-import { useContext } from 'react';
-import { GameContext } from './context/GameContext';
 import { useThemeContext } from './context/ThemeContext';
 import { useSelector } from 'react-redux';
 
@@ -12,7 +10,6 @@ import { useSelector } from 'react-redux';
 function App() {
   const {theme} = useThemeContext();
   const {showAdvanced} = useSelector((state) => state.settings);
-  // const {isGameOver} = useContext(GameContext);
   const {isGameOver} = useSelector((state) => state.game);
 
   

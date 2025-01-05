@@ -7,7 +7,6 @@ import { mdiSkipNext } from '@mdi/js';
 import { useState, useRef } from 'react';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import { mdiPlus } from '@mdi/js';
-import { GameContext } from '../../context/GameContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { newGame, nextLevel } from '../../store/slices/gameSlice';
 
@@ -17,7 +16,6 @@ export default function GameOptions () {
   const {theme} = useContext(ThemeContext);
   const modalRef = useRef(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
-  // const { nextLevel, newGame, isGameOver } = useContext(GameContext);
   const { isGameOver } = useSelector((state) => state.game);
   
   const openModal = () => {

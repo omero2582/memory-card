@@ -1,14 +1,12 @@
-import React, {useContext} from "react";
+import React from "react";
 import './Scoreboard.scss'
 import Icon from '@mdi/react';
 import { mdiCardsPlaying } from '@mdi/js';
-import { GameContext } from "../../context/GameContext";
 import { useSelector } from "react-redux";
 import { cardsClickedSelect } from "../../store/slices/gameSlice";
 
 export default function Scoreboard () {
   
-  // const {level, cardsThisLevel, score, highScore, cardsClicked} = useContext(GameContext);
   const {level, cardsThisLevel, score, highScore} = useSelector((state) => state.game);
 
   const cardsClicked = useSelector(cardsClickedSelect)

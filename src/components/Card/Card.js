@@ -1,12 +1,10 @@
-import React, {useState} from "react";
+import React, { useMemo } from "react";
 import './Card.scss'
 import Icon from '@mdi/react';
 import { mdiCardsSpade } from '@mdi/js';
 import { mdiCardsClub } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
 import { mdiCardsDiamond } from '@mdi/js';
-import { useContext, useMemo } from "react";
-import { GameContext } from "../../context/GameContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getCardBackURL } from "../../store/slices/settingsSlice";
 import { handleCardClick } from "../../store/slices/gameSlice";
@@ -39,7 +37,6 @@ export default function Card ({ character}) {
   const dispatch = useDispatch();
   const {name, id, img} = character;
   const { showNames, showCardsClicked, cardBack } = useSelector((state) => state.settings);
-  // const {cardTheme, isGameOver, isFlipped, handleCardClick} = useContext(GameContext);
   const {cardTheme, isGameOver, isFlipped} = useSelector((state) => state.game);
   const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   
