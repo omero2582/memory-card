@@ -22,6 +22,7 @@ export default function genshin() {
 
     const character = {
       id: i,
+      type: 'genshin',
       name,
       img: path,
       isClicked: false,

@@ -16,14 +16,14 @@ const playingCardsMap = {
   diamonds: mdiCardsDiamond,
 }
 
-const getShortName = (name, cardTheme) => {
+const getShortName = (name, type) => {
   let shortName = name;
-  if (cardTheme === 'playingCards') {
+  if (type === 'playingCards') {
     if (!name.includes('joker')){
       const words = name.split(' ');
       const rank = words[0];
       const suit = words[words.length - 1];
-      console.log(suit);
+      console.log(suit, 'path= ',playingCardsMap[suit]);
       shortName = (
       <>
         <span>{rank}</span><Icon title={suit} path={playingCardsMap[suit]} size={1} />
@@ -35,14 +35,13 @@ const getShortName = (name, cardTheme) => {
 
 export default function Card ({ character}) {
   const dispatch = useDispatch();
-  const {name, id, img} = character;
+  const {name, id, img, type} = character;
   const { showNames, showCardsClicked, cardBack } = useSelector((state) => state.settings);
   const {cardTheme, isGameOver, isFlipped} = useSelector((state) => state.game);
+  console.log('NAAAAAME', name, 'CARD THEMEE', cardTheme)
   const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   
-  let newName = useMemo(() => getShortName(name, cardTheme), [cardTheme, name]);
-  // let newName = getShortName(name, cardTheme); 
-  // use  the useMemo version, but for now I just want to see. Card rns twice on startup, and 3 times on cardClick.
+  let newName = useMemo(() => getShortName(name, type), [type, name]);
   
   const width = 140;
   const height = 200;
@@ -59,7 +58,7 @@ export default function Card ({ character}) {
             ${showClickedCheat ? 'showClickedCheat' : '' }
             ${isGameOver ? 'game-over' : ''}
             ${character.isDoubleClicked ? 'double-clicked' : ''}
-            ${cardTheme}`}
+            ${type}`}
           onClick={() => dispatch(handleCardClick(character))}>
           {showNames && <h3 className="card-name">{newName}</h3>}
           <img className={`card-img`} alt={name} src={img}/>

@@ -7,10 +7,10 @@ import { cardsClickedSelect } from "../../store/slices/gameSlice";
 
 export default function Scoreboard () {
   
-  const {level, cardsThisLevel, score, highScore} = useSelector((state) => state.game);
+  const {level, cardsOnBoard, score, highScore} = useSelector((state) => state.game);
 
   const cardsClicked = useSelector(cardsClickedSelect)
-  const numCards = cardsThisLevel.length;
+  const numCards = cardsOnBoard.length;
   const numClicked = cardsClicked.length;
   
   return (

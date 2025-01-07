@@ -1,0 +1,49 @@
+A. Game logic
+Needs to be all within the same global state store, so all inside redux
+B. Naming / Untagling Spaghetti
+It helps a lot to think of things like a general card game. We have a board,
+deck, shuffling, drawing, cards currently played, card types that designate
+specifc rules per card type
+C. Card theme
+I used to have the card theme switcher indicate how the css and JSX would be
+rendered for all cards on the board, so when cardTheme changes, it will
+immediately change all UI assuming it used a diff card theme.
+However I have now changed it so each card contains a .type property indicating
+its theme/type
+
+I did this to solve a couple of bugs, console errors, and problems:
+- card theme needs to change with the settings selector immediately, however
+our current shuffling logic is: change theme + deck -> then flip part 1 
+-> then setCardsOnBoard -> then flip part 2.
+- This means even though our change theme and deck have changed, our effect
+requires us to not change the cardsOnBoard immediately.
+This means if I rely on cardTheme to render the css/jsx for all cards on the board,
+this will be wrong because all the renders as its doing 'flip part 1' will have 
+the wrong theme!!!
+- Also if in the future I want to allow mix and matching of cards so that 
+cards of different themes can be on the board at the same time, or just
+thinking in general how different card themes need different jsx/css, it is
+clear that each card needs to describe its own card.type and it is not possible 
+to rely on 1 global 'cardTheme'
+D. Fetchings cards
+Currently we have 2 local, 1 fetch. We currently have made our app logic assume
+that it will fetch, but perhaps this can be revised, for example, it only
+needs to fetch on startup, so look into chanignt the options/defaults, tho I think 
+mutations dont have ny, jsut queries.
+Also we switched from Query -> Mutation, but Im not sure if now that we have
+decoupled the cardTheme from each card type, if it makes sense to 
+turn it back into a query. Keep in mind that the major downside is that chanign
+it to a query means my fetch will REACT to the card theme dispatch, meaning its
+dispatch will force a render before our queryFn. In comparrison with the current
+method (mutations), I am able to easily dispatch both cardTheme and deck at the
+same time.
+As explained in my latest git log:
+I tried every trick in the book, GPT, stackoverflow, and many TK Dodo blogs &     
+conferences. Ultimately it seemed like the best solution was that
+instead of letting our selector change card theme redux state and
+having the useQuery(cardTheme) react to that change, I instead
+change it to a mutation so that I can call mutate(e.target.value),        
+and this allows my query mutation to dispatch both cardTheme and
+setDeck at the same time.
+Can maybe revisit this later or swap into RTK Query, but I dont think     
+anythign will change really

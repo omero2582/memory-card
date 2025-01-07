@@ -1,6 +1,6 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
-import {  setLevel, nextLevel, setCardsList, handleCardTheme, gameOver, effectSubstitute, newGame} from './gameSlice';
-import { logToTextArea } from './logsSlice';
+import {   nextLevel, setDeck, handleCardTheme, gameOver, drawCards, newGame} from './slices/gameSlice';
+import { logToTextArea } from './slices/logsSlice';
 
 
 
@@ -13,6 +13,10 @@ const actionLogMap = {
 
 //
 
+// Captures state before vs after with actions.
+// But when using sync thunks, it can only capture before states
+// It seems like for async thunks, I have to specifically map above to their /fufilled, and /pending actions,
+// but it seems like I cannot capture the before and after states to hold these variables in 1 single scope
 export const stateCaptureMiddleware = (store) => (next) => (action) => {
   const stateBefore = store.getState().game;
   const result = next(action);  // Let the reducer handle the action
@@ -28,28 +32,32 @@ export const stateCaptureMiddleware = (store) => (next) => (action) => {
 };
 //
 
+const shuffleMap = [ nextLevel.type, setDeck.type, newGame.type]
 
-const shuffleMap = [setLevel.type, nextLevel.type, setCardsList.type, newGame.type]
+// Listener middleware below is basically a simpler way to write middleware above, but will only run after an action/state,
+// so you cannot sandwitch an action/state with 2 functions
+export const gameMiddleware = createListenerMiddleware();
 
-export const shuffleMiddleware = createListenerMiddleware();
-shuffleMiddleware.startListening({
+
+// Shuffling Effect
+gameMiddleware.startListening({
   // matcher: (action) => shuffleMap.includes(action.type),
+  // predicate is able to trigger when specific state changes, as oppossed to relying on matcher for action triggers
+  // predicate is better because I only have to list 2 states, as opposed to listing 4 actions that change those 2 states
   predicate: (action, curState, prevState) =>
     prevState.game.level !== curState.game.level
-    || prevState.game.cardsList !== curState.game.cardsList,
+    || prevState.game.deck !== curState.game.deck,
   effect: async (action, listenerApi) => {
-    listenerApi.dispatch(effectSubstitute());
+    listenerApi.dispatch(drawCards());
   },
 });
 
-
-// export const listenerMiddleware = createListenerMiddleware();
-// // Generic listener that handles multiple actions
-// listenerMiddleware.startListening({
+// Logging effect
+// gameMiddleware.startListening({
 //   matcher: (action) => action.type in actionLogMap,
 //   effect: async (action, listenerApi) => {
-//     const stateAfter = listenerApi.getState().game;
 //     const stateBefore = listenerApi.getOriginalState().game;
+//     const stateAfter = listenerApi.getState().game;
     
 //     const baseAction = action.payload?.type ? action.payload : action;
 //     const logMessage = actionLogMap[baseAction.type](action, stateBefore, stateAfter);

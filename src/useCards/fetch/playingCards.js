@@ -26,6 +26,7 @@ export default function playingCards() {
 
     const character = {
       id: fileName,
+      type: 'playingCards',
       name,
       img: path,
       isClicked: false,
