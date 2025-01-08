@@ -1,5 +1,5 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
-import {   nextLevel, setDeck, handleCardTheme, gameOver, drawCards, newGame} from './slices/gameSlice';
+import {   nextLevel, setDeck, setCardTheme , gameOver, drawCards, newGame} from './slices/gameSlice';
 import { logToTextArea } from './slices/logsSlice';
 
 
@@ -8,7 +8,7 @@ import { logToTextArea } from './slices/logsSlice';
 const actionLogMap = {
   [nextLevel.type]: (action, originalState, state) =>  `Level ${originalState.level} -> ${state.level}`,
   [gameOver.type]: (action, originalState, state) =>  `Game Over, Already Clicked ${action.payload.name}`,
-  [handleCardTheme.type]: (action, originalState, state) =>  `Card theme set: ${action.payload}`,
+  [setCardTheme.type]: (action, originalState, state) =>  `Card theme set: ${action.payload}`,
 };
 
 //
@@ -46,8 +46,9 @@ gameMiddleware.startListening({
   // predicate is better because I only have to list 2 states, as opposed to listing 4 actions that change those 2 states
   predicate: (action, curState, prevState) =>
     prevState.game.level !== curState.game.level
-    || prevState.game.deck !== curState.game.deck,
-  effect: async (action, listenerApi) => {
+    // || prevState.game.deck !== curState.game.deck
+    || action.type === newGame.type
+  ,effect: async (action, listenerApi) => {
     listenerApi.dispatch(drawCards());
   },
 });

@@ -27,13 +27,11 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   selectors: {
-    cardsClickedSelect: (state) => state.cardsOnBoard.filter(c => c.isClicked === true)
+    selectCardsClicked: (state) => state.cardsOnBoard.filter(c => c.isClicked === true)
   },
   reducers: {
     setCardTheme: (state, { payload }) => {
       state.cardTheme = payload;
-      state.score = 0;  /// <--- ???? in the ahdnleCArdTheme i also call newGame() so,,, ???
-      state.level = 1;
     },
     setDeck: (state, { payload }) => {
       state.deck = payload;
@@ -132,16 +130,13 @@ export const gameSlice = createSlice({
 // Async Thunks = for async, I am using createAsyncTunk bc it comes with the action.fufilled/pending, but manual async thunk do not
 
 // uses setCardTheme, newGame
-export const handleCardTheme = createSyncThunk(
-  'game/handleCardTheme',
-  (dispatch, getState, cardTheme) => {
-    console.log('HANDLE CARD THEME')
-    const { setCardTheme, newGame } = gameSlice.actions;
-    dispatch(setCardTheme(cardTheme));
-    const state = getState().game;
-    if (state.isGameOver) {
-      dispatch(newGame());
-    }
+export const handleNewDeck = createSyncThunk(
+  'game/handleNewDeck',
+  (dispatch, getState, deck) => {
+    console.log('HANDLE NEW DECK')
+    const { setDeck, newGame } = gameSlice.actions;
+    dispatch(setDeck(deck));
+    dispatch(newGame());
   }
 );
 
@@ -217,7 +212,7 @@ export const drawCards = createSyncThunk(
 
 
 
-export const { cardsClickedSelect } = gameSlice.selectors;
+export const { selectCardsClicked } = gameSlice.selectors;
 
 export const { 
   setCardsOnBoard,
@@ -226,6 +221,7 @@ export const {
   setIsFlipped,
   newGame,
   nextLevel,
-  gameOver
+  gameOver,
+  setCardTheme
 } = gameSlice.actions;
 export default gameSlice.reducer;

@@ -3,14 +3,14 @@ import './Scoreboard.scss'
 import Icon from '@mdi/react';
 import { mdiCardsPlaying } from '@mdi/js';
 import { useSelector } from "react-redux";
-import { cardsClickedSelect } from "../../store/slices/gameSlice";
+import { selectCardsClicked } from "../../store/slices/gameSlice";
 
 export default function Scoreboard () {
   
   const {level, cardsOnBoard, score, highScore} = useSelector((state) => state.game);
 
-  const cardsClicked = useSelector(cardsClickedSelect)
   const numCards = cardsOnBoard.length;
+  const cardsClicked = useSelector(selectCardsClicked)
   const numClicked = cardsClicked.length;
   
   return (

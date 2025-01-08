@@ -2,10 +2,8 @@ import genshin from './fetch/genshin';
 import league from './fetch/league';
 import playingCards from './fetch/playingCards';
 import { useDispatch } from 'react-redux';
-import { handleCardTheme, setDeck } from '../store/slices/gameSlice';
+import { handleNewDeck, setCardTheme, setDeck } from '../store/slices/gameSlice';
 import { useMutation, useQuery } from '@tanstack/react-query';
-
-const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
 
 export const useCards = () => {
   const dispatch = useDispatch();
@@ -23,19 +21,18 @@ export const useCards = () => {
   };
 
   const setupGame = async (cardTheme) => {
-    const characters = await getGameCards(cardTheme);
+    const cards = await getGameCards(cardTheme);
     // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
-    const shuffled = shuffleArr(characters);
-    dispatch(setDeck(shuffled));
-    dispatch(handleCardTheme(cardTheme))
-    await preloadImages(shuffled.map(c => c.img));
-    return characters;
+    dispatch(setCardTheme(cardTheme))
+    dispatch(handleNewDeck(cards))
+    await preloadImages(cards.map(c => c.img));
+    return cards;
   }
 
   const cardThemeQuery = useMutation({
     mutationFn: setupGame,
-    onSuccess: async (characters, cardTheme) => {
-      console.log('SUCCESSSSSS')
+    onSuccess: async (cards, cardTheme) => {
+      console.log('ON SUCCESSSSSS')
     }
   })
 

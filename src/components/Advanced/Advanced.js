@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import './Advanced.scss'
 import { useSelector } from "react-redux";
-import { cardsClickedSelect } from "../../store/slices/gameSlice";
+import { selectCardsClicked } from "../../store/slices/gameSlice";
 
 export default function Advanced() {
   const { logs } = useSelector((state) => state.logs);
   const textareaRef = useRef();
-  const cardsClicked = useSelector(cardsClickedSelect)
+  const cardsClicked = useSelector(selectCardsClicked)
   
   useEffect(() => {
     if(textareaRef.current){
