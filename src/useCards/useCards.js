@@ -1,6 +1,6 @@
-import genshin from './fetch/genshin';
-import league from './fetch/league';
-import playingCards from './fetch/playingCards';
+import genshin from '../services/cards/genshin';
+import league from '../services/cards/league';
+import playingCards from '../services/cards/playingCards';
 import { useDispatch } from 'react-redux';
 import { handleNewDeck, setCardTheme, setDeck } from '../store/slices/gameSlice';
 import { useMutation, useQuery } from '@tanstack/react-query';

@@ -1,28 +1,48 @@
 .Scoreboard {
   display: grid;
   grid-auto-flow: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  column-gap: clamp(10px, 10%, 90px);
   margin-bottom: 6px;
+
   
+
   .label {
     font-size: 1.44rem;   /*23.04 px*/
     font-weight:500;
-    &.numCards {
-      display: flex;
-    }
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
   }
 
   div{
-    column-gap: 30px;
+    column-gap: 35px;
     display: grid;
     grid-auto-flow: column;
     justify-content: center;
     > .stat {
       display: grid;
-      grid-auto-flow: column;
+      grid-auto-flow: row;
       align-items: center;
+      align-content: center;
       justify-content: start;
-      column-gap: 7px;
+      column-gap: 12px;
+      line-height: 1.62rem;
+      &.high-score{
+        // order: -1;  
+        .label {
+          // font-size: 1.1rem;
+
+        }
+      }
+      &.numCards {
+        line-height: 1.5rem;
+        row-gap: 3px;
+        // margin-right: -8px;
+        .label{
+          display: flex;
+        }
+      }
     }
   }
 
@@ -35,13 +55,22 @@
 @media (max-width: 600px){
   .Scoreboard{
     div{
-      display: grid;
       grid-auto-flow: row;
-      justify-content: center;
+      // justify-items: center;
+      // column-gap: 10px;
+      column-gap: 10px;
+
+      >.stat{
+        grid-auto-flow: column;
+        // grid-auto-columns: min-content;
+        &.high-score{
+          order: -1;   
+        }
+        &.numCards{
+          order: 1;   
+        }
+      }
     }
 
-    .stat.high-score{
-      order: -1;
-    }
   } 
 }
