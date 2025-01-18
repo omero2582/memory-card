@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/memory-card/static/css/main.cec0a2ca.css",
-    "main.js": "/memory-card/static/js/main.a9aae390.js",
+    "main.js": "/memory-card/static/js/main.007330a0.js",
     "static/media/king_of_hearts.png": "/memory-card/static/media/king_of_hearts.675074aa3aa1f24a51c6.png",
     "static/media/king_of_diamonds.png": "/memory-card/static/media/king_of_diamonds.6fe8c35703396c58f084.png",
     "static/media/queen_of_clubs.png": "/memory-card/static/media/queen_of_clubs.271b1eb95152acbd4aab.png",
@@ -126,10 +126,10 @@
     "static/media/2_of_spades.png": "/memory-card/static/media/2_of_spades.9436c10d350d441f42a7.png",
     "index.html": "/memory-card/index.html",
     "main.cec0a2ca.css.map": "/memory-card/static/css/main.cec0a2ca.css.map",
-    "main.a9aae390.js.map": "/memory-card/static/js/main.a9aae390.js.map"
+    "main.007330a0.js.map": "/memory-card/static/js/main.007330a0.js.map"
   },
   "entrypoints": [
     "static/css/main.cec0a2ca.css",
-    "static/js/main.a9aae390.js"
+    "static/js/main.007330a0.js"
   ]
 }
