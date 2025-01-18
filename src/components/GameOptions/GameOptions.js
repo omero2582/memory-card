@@ -30,7 +30,6 @@ export default function GameOptions () {
   };
 
   const handleTransitionEnd = () => {
-    console.log('end transition')
     modalRef.current.removeEventListener("animationend", handleTransitionEnd);
     modalRef.current.close();
   }

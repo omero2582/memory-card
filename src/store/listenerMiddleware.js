@@ -1,6 +1,7 @@
-import { createListenerMiddleware } from '@reduxjs/toolkit';
+import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
 import {   nextLevel, setDeck, setCardTheme , gameOver, drawCards, newGame} from './slices/gameSlice';
 import { logToTextArea } from './slices/logsSlice';
+import { apiSlice } from './api/apiSlice';
 
 
 
@@ -52,6 +53,14 @@ gameMiddleware.startListening({
     listenerApi.dispatch(drawCards());
   },
 });
+
+// gameMiddleware.startListening({
+//   predicate: (action, curState, prevState) =>
+//   action.type === setCardTheme.type
+//   ,effect: async (action, listenerApi) => {
+//     listenerApi.dispatch(drawCards());
+//   },
+// });
 
 // Logging effect
 // gameMiddleware.startListening({

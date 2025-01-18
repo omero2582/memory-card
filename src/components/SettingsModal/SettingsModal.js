@@ -6,7 +6,8 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleShowNames, toggleShowAdvanced, handleCardBack, cardBackMap, getCardBackURL } from '../../store/slices/settingsSlice';
 import { useCards } from '../../useCards/useCards';
-import { useLazyGetCardsQuery } from '../../store/api/apiSlice';
+import { useLazyGetDeckListQuery, useGetDeckListQuery } from '../../store/api/apiSlice';
+import { setCardTheme } from '../../store/slices/gameSlice';
 
 const SettingsModal = forwardRef(function SettingsModal(props, ref) {
 
@@ -15,7 +16,8 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
   const {showNames, showAdvanced, cardBack, cardTheme} = useSelector((state) => state.settings);
   //
   // const cardMutation = useCards();
-  const [trigger] = useLazyGetCardsQuery();
+  // const [trigger] = useLazyGetDeckListQuery();
+  const {data} = useGetDeckListQuery(cardTheme)
 
   const {isModalClosing, closeModal} = props;
   const {theme, toggleTheme} = useContext(ThemeContext);
@@ -41,10 +43,11 @@ const SettingsModal = forwardRef(function SettingsModal(props, ref) {
       <section className={`Settings ${theme}`} onClick={e => e.stopPropagation()}>
         <section className="game-theme">
           <label htmlFor="game-theme" className="game-theme-title">Card Theme:</label>
+          {/* onChange={(e) => trigger(e.target.value)}>  */}
           <select 
             id="game-theme" 
             value={cardTheme}
-            onChange={(e) => trigger(e.target.value)}> 
+            onChange={(e) => dispatch(setCardTheme(e.target.value))}> 
             <option value='playingCards'>Playing Cards</option>
             <option value='league'>League of Legends</option>
             <option value='genshin'>Genshin Impact</option>

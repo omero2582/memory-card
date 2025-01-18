@@ -3,25 +3,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import genshin from '../../services/cards/genshin';
 import league from '../../services/cards/league';
 import playingCards from '../../services/cards/playingCards';
-import { handleNewDeck, setCardTheme } from "../slices/gameSlice";
-
-// // Custom baseQuery to handle user state
-// const customBaseQuery = (baseUrl) => {
-//   const baseQuery = fetchBaseQuery({ baseUrl });
-//   return async (args, api, extraOptions) => {
-//     const result = await baseQuery(args, api, extraOptions);
-    
-//     if(result.data && args.url !== '/products/upload-presigned'){
-//       if (result.data) {
-//         console.log('Setting user TO', result.data.user)
-//         api.dispatch(setUser(result.data.user));
-//       }
-//     }
-
-//     // return result; // Return the original result
-//     return {...result, meta:{...result.meta, test:'hi'}};
-//   };
-// };
 
 function preloadImages(imageUrls) {
   return Promise.all(
@@ -49,19 +30,11 @@ const myQueryFn = async ( cardTheme, { dispatch, getState }, extraOptions) => {
       const out = await fetchCards();
       return out;
     };
-  
-    const setupGame = async (cardTheme) => {
-      const cards = await getGameCards(cardTheme);
-      // loading like this always starts out with isClicked: false. No need to call resetCardsClicked() here
-      dispatch(setCardTheme(cardTheme))
-      dispatch(handleNewDeck(cards))
-      await preloadImages(cards.map(c => c.img));
-      return cards;
-    }
 
   try {
-    const data = await setupGame(cardTheme);
-    return { data }
+    const deckList = await getGameCards(cardTheme)
+    // await preloadImages(deckList.map(c => c.img));
+    return { data: deckList }
   } catch (error) {
     return { error }
   }
@@ -81,39 +54,50 @@ const myQueryFn = async ( cardTheme, { dispatch, getState }, extraOptions) => {
 // using mock fetch, apart from our .env variable
 // for ex 'query: (body, isUseMock) =>
 export const apiSlice = createApi({
-  refetchOnMountOrArgChange: 20, // staleTime
+  refetchOnMountOrArgChange: 60, // staleTime
   // I can either enable it here, or speicifcally on every hook call
   // keepUnusedDataFor <- defaults to 60s = time the data will remain in the cache, 
   // after last component referencing it umounts. Also available per endpoint
   reducerPath: 'gameApi',
   // baseQuery: fetchBaseQuery({baseUrl: '/api'}),
   // baseQuery: customBaseQuery,
-  tagTypes: ['Cards', 'LIST'],
+  tagTypes: ['DeckList', 'LIST'],
   endpoints: (builder) => ({
-    getCards: builder.query({
+    getDeckList: builder.query({
       queryFn: myQueryFn,
-      async onQueryStarted(arg, api){
-        // api.queryFulfilled promise
+      async onQueryStarted(arg, {queryFulfilled}){
         //https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced#the-onquerystarted-lifecycle
+        // console.log('ONQUERYSTART')
+        const {data} = await queryFulfilled;
+        await preloadImages(data.map(c => c.img));
+        // console.log('PRELOADED IMAGES', data)
+        // TODO - Above code flow will be:
+        // queryFN -> run onQueryStarted -> run useEffect on Board.js that runs when
+        // the query data changes -> Effect finishes -> our code here finishes
+        // Basically: if we want to await the pre-loading as part of our 'fetch',
+        // then its better to await preLoadImages inside our queryFn, but If we are ok
+        // with the fetch running, then the useEffect running in parallel while preLoasing
+        // images, then it is better to run it here
       },
+      // only on first cacheEntry per arg
       async onCacheEntryAdded(arg, api) {
         await api.cacheDataLoaded;  // so that cacheEntry will be resolved and have a.data property
-        console.log('CACHCEHCHECHCHEHCEHEHC',  api.getCacheEntry())
+        console.log('CACHE ENTRY ADDED',  api.getCacheEntry())
       },
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Cards', id })),
-              { type: 'Cards', id: 'LIST' },
+              ...result.map(({ id }) => ({ type: 'DeckList', id })),
+              { type: 'DeckList', id: 'LIST' },
             ]
-          : [{ type: 'Cards', id: 'LIST' }],
-    }),
+          : [{ type: 'DeckList', id: 'LIST' }],
+    })
   })
 })
 
 export const { 
-  useGetCardsQuery,
-  useLazyGetCardsQuery
+  useGetDeckListQuery,
+  useLazyGetDeckListQuery
 } = apiSlice;
 
 export default apiSlice.reducer;

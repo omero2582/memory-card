@@ -23,7 +23,7 @@ const getShortName = (name, type) => {
       const words = name.split(' ');
       const rank = words[0];
       const suit = words[words.length - 1];
-      console.log(suit, 'path= ',playingCardsMap[suit]);
+      // console.log(suit, 'path= ',playingCardsMap[suit]);
       shortName = (
       <>
         <span>{rank}</span><Icon title={suit} path={playingCardsMap[suit]} size={1} />
@@ -38,7 +38,7 @@ export default function Card ({ character}) {
   const {name, id, img, type} = character;
   const { showNames, showCardsClicked, cardBack } = useSelector((state) => state.settings);
   const {cardTheme, isGameOver, isFlipped} = useSelector((state) => state.game);
-  console.log('NAAAAAME', name, 'CARD THEMEE', cardTheme)
+  // console.log('NAAAAAME', name, 'CARD THEMEE', cardTheme)
   const showClickedCheat = character.isClicked && (showCardsClicked || isGameOver) ;
   
   let newName = useMemo(() => getShortName(name, type), [type, name]);

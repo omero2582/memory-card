@@ -1,12 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSelector, createSlice, current } from "@reduxjs/toolkit";
 import { logToTextArea } from "./logsSlice";
 
-// TODODOODODODO
-// need to change the shuffling logic, feel like there is something off about the cards clicked/list not chanign
-// from 3/4 to 4/4 as soon as u click.
-// Also I think in genreal the code here should be improvable by like 10x to be made much SIMPLER
 
-const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
+// const shuffleArr = (array) => [...array].sort(() => Math.random() - 0.5);
+const shuffleArr = (array) => {
+  console.log('SUFFFLE FN', array)
+  return [...array].sort(() => Math.random() - 0.5)
+};
 // ♠️♥️♦️♣️ Symbols in case I need these
 
 const initialState = {
@@ -20,14 +20,18 @@ const initialState = {
   isFlipped: false, 
   isGameOver: false, 
   //
-  error: null, isLoading: false,
+  // error: null, isLoading: false,
 }
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
   selectors: {
-    selectCardsClicked: (state) => state.cardsOnBoard.filter(c => c.isClicked === true)
+    // selectCardsClicked: (state) => state.cardsOnBoard.filter(c => c.isClicked === true)
+    selectCardsClicked: createSelector(
+      [(state) => state.cardsOnBoard], // Input selector
+      (cardsOnBoard) => cardsOnBoard.filter((c) => c.isClicked === true) // Result selector
+    ),
   },
   reducers: {
     setCardTheme: (state, { payload }) => {
@@ -35,12 +39,11 @@ export const gameSlice = createSlice({
     },
     setDeck: (state, { payload }) => {
       state.deck = payload;
-      console.log('SET DECK')
+      console.log('SET DECK', payload)
     },
     setCardsOnBoard: (state, { payload }) => {
       state.cardsOnBoard = payload;
       console.log('SET CARDS THIS LEVEL', payload)
-      // state.cardsClicked = state.cardsThisLevel.filter(c => c.isClicked === true);
     }, 
     setScore: (state, { payload }) => {
       state.score = payload;
@@ -55,11 +58,12 @@ export const gameSlice = createSlice({
     setIsFlipped: (state, { payload }) => {
       state.isFlipped = payload;
     },
-    newGame: (state, action) => {
+    newGame: (state, {payload}) => {
       // resetCardsClicked();
       state.score = 0;
       state.level = 1
-      state.deck = shuffleArr(state.deck)
+      const newDeck = shuffleArr(payload || state.deck);
+      state.deck = newDeck
       state.isGameOver = false;
     },
     gameOver: (state, { payload }) => {
@@ -133,10 +137,9 @@ export const gameSlice = createSlice({
 export const handleNewDeck = createSyncThunk(
   'game/handleNewDeck',
   (dispatch, getState, deck) => {
-    console.log('HANDLE NEW DECK')
+    console.log('HANDLE NEW DECK', deck)
     const { setDeck, newGame } = gameSlice.actions;
-    dispatch(setDeck(deck));
-    dispatch(newGame());
+    dispatch(newGame(deck));
   }
 );
 
@@ -148,7 +151,6 @@ export const shuffleCardsThisLevel = createAsyncThunk(
   'game/shuffleCardsThisLevel',
   async (newCards, { dispatch, getState }) => {
     const { setIsFlipped, setCardsOnBoard } = gameSlice.actions
-    console.log('SUFFLING', newCards)
     dispatch(setIsFlipped(true));
     const { cardsOnBoard } = getState().game;
     if (cardsOnBoard.length !== 0){ // <-- TODO why is this here???
